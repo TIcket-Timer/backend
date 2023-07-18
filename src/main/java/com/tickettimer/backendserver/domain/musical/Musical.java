@@ -21,6 +21,8 @@ public class Musical {
 
     @Enumerated(EnumType.STRING)
     private SiteCategory siteCategory;
+    @OneToMany(mappedBy = "musical")
+    private List<MemberMusical> memberMusicals = new ArrayList<>();
 
     private String title;
 

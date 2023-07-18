@@ -3,6 +3,7 @@ package com.tickettimer.backendserver.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @Table(name="MEMBER")
 public class Member {
@@ -33,5 +33,13 @@ public class Member {
     private String email;
 
     private String profileUrl;
+
+    @Builder
+    public Member(String serverId, String nickname, String email, String profileUrl) {
+        this.serverId=serverId;
+        this.nickname=nickname;
+        this.email=email;
+        this.profileUrl=profileUrl;
+    }
 
 }

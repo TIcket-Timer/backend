@@ -3,11 +3,11 @@ package com.tickettimer.backendserver.domain;
 import com.tickettimer.backendserver.domain.musical.Musical;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 @Entity
 @Table(name="ALARM")
 public class MemberMusical {
@@ -24,5 +24,12 @@ public class MemberMusical {
     @ManyToOne
     @JoinColumn(name = "MUSICAL_ID")
     private Musical musical;
+    @Builder
+    public MemberMusical(Member member, Musical musical) {
+        member.getMemberMusicals().add(this);
+        musical.getMemberMusicals().add(this);
+        this.member=member;
+        this.musical=musical;
+    }
 
 }
