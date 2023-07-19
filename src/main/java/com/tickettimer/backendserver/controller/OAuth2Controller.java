@@ -24,6 +24,11 @@ public class OAuth2Controller {
     private final ObjectMapper objectMapper;
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
+
+    @GetMapping("/")
+    public String hello() {
+        return "hello";
+    }
     @GetMapping("/kakao")
     public ResponseEntity<TokenInfo> getAccessAndRefresh(@RequestHeader("access-token") String kakaoAccessToken) {
         // header 생성
@@ -54,8 +59,8 @@ public class OAuth2Controller {
         String nickname = (String) properties.get("nickname");
 
         // 이메일
-        String email = (String)kakaoAccount.get("email");
-        System.out.println(serverId+ nickname+ email);
+        String email = (String) kakaoAccount.get("email");
+        System.out.println(serverId + nickname + email);
         Optional<Member> findMember = memberRepository.findByServerId(serverId);
 
         Member member = null;
@@ -65,9 +70,8 @@ public class OAuth2Controller {
                     .serverId(serverId)
                     .nickname(nickname)
                     .email(email).build();
-            member=memberRepository.save(newMember);
-        }
-        else{
+            member = memberRepository.save(newMember);
+        } else {
             member = findMember.get();
         }
         String accessToken = jwtService.createAccessToken(
@@ -75,7 +79,7 @@ public class OAuth2Controller {
                 member.getId()
         );
 
-        String refreshToken = jwtService.createRefreshToken(member.getId());
+        String refreshToken = jwtService.createRefreshToken(member.getServerId(), member.getId());
         TokenInfo tokenInfo = TokenInfo.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken).build();

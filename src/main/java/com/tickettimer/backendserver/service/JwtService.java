@@ -1,5 +1,7 @@
 package com.tickettimer.backendserver.service;
 
+import com.tickettimer.backendserver.dto.TokenInfo;
+import com.tickettimer.backendserver.dto.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,16 +16,23 @@ public class JwtService {
 //    private final TokenRepository tokenRepository;
     @Value("${jwt.secretKey}") //application.properties에 저장되어 있는 값을 가져온다.
     private String secretKey;
-    @Value("${jwt.expiredMs}") //application.properties에 저장되어 있는 값을 가져온다.
-    private Long expiredMs;
+    @Value("${jwt.access.expiredMs}") //application.properties에 저장되어 있는 값을 가져온다.
+    private Long accessExpiredMs;
+    @Value("${jwt.refresh.expiredMs}") //application.properties에 저장되어 있는 값을 가져온다.
+    private Long refreshExpiredMs;
 
-    public String getMemberId(String token) {
+    public String getServerId(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
-                .getBody().get("memberId", String.class);
+                .getBody().get("serverId", String.class);
     }
     public Long getId(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().get("id", Long.class);
+    }
+
+    public String getTokenType(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+                .getBody().get("type", String.class);
     }
 
     public boolean isExpired(String token) {
@@ -33,25 +42,28 @@ public class JwtService {
 
     public String createAccessToken(String memberServerId, Long id) {
         Claims claims = Jwts.claims();
-        claims.put("memberId", memberServerId);
+        claims.put("serverId", memberServerId);
         claims.put("id", id);
+        claims.put("type", TokenType.ACCESS.getName());
 
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpiredMs))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
         return token;
     }
-    public String createRefreshToken(Long id) {
+    public String createRefreshToken(String serverId, Long id) {
         Claims claims = Jwts.claims();
         claims.put("id", id);
+        claims.put("serverId", serverId);
+        claims.put("type", TokenType.REFRESH.getName());
 
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiredMs))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 //        Token token1 = new Token(id, token);
