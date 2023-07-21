@@ -2,16 +2,14 @@ package com.tickettimer.backendserver.domain;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name="MEMBER")
 public class Member {
 
