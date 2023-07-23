@@ -18,7 +18,6 @@ import java.util.Optional;
 
 
 @RequestMapping("/api/oauth2")
-@RestController
 @RequiredArgsConstructor
 public class OAuth2Controller {
     private final ObjectMapper objectMapper;
@@ -70,7 +69,7 @@ public class OAuth2Controller {
                     .serverId(serverId)
                     .nickname(nickname)
                     .email(email).build();
-            member = memberRepository.save(newMember);
+            memberRepository.save(newMember);
         } else {
             member = findMember.get();
         }

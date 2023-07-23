@@ -31,13 +31,15 @@ public class Member {
     private String email;
 
     private String profileUrl;
+    private String password;
 
     @Builder
-    public Member(String serverId, String nickname, String email, String profileUrl) {
+    public Member(String serverId, String nickname, String email, String profileUrl, String password) {
         this.serverId=serverId;
         this.nickname=nickname;
         this.email=email;
         this.profileUrl=profileUrl;
+        this.password=password;
     }
 
 }

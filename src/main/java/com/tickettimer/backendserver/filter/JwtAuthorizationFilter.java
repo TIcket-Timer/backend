@@ -59,8 +59,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     ) throws IOException, ServletException {
         String jwt = request.getHeader("Authorization");
         //jwt가 없거나 Bearer로 시작하지 않으면 거부
-        if (jwt == null || !jwt.startsWith("Bearer")) {
-            String path =request.getContextPath() + request.getServletPath();
+        if (jwt == null || !jwt.startsWith("Bearer") ) {
+            System.out.println("login");
+            String path = request.getContextPath() + request.getServletPath();
             if (
                     path.equals("/login/oauth2/code/kakao") ||
                             path.equals("/api/oauth2/kakao")
