@@ -20,7 +20,7 @@ public class MemberService {
     public Member findById(Long id) {
         Optional<Member> findMember = memberRepository.findById(id);
         return findMember.orElseThrow(
-                () -> new CustomNotFoundException("id", id.toString())
+                () -> new CustomNotFoundException("memberId", id.toString())
         );
     }
 
