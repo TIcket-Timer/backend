@@ -47,12 +47,12 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(
                 sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
-        httpSecurity.apply(new MyCustom());
-        httpSecurity.authorizeHttpRequests(
-                request -> request.requestMatchers("/api/oauth2/kakao").permitAll()
-                        .requestMatchers("/login/oauth2/code/kakao").permitAll()
-                        .anyRequest().authenticated()
-        );
+//        httpSecurity.apply(new MyCustom());
+//        httpSecurity.authorizeHttpRequests(
+//                request -> request.requestMatchers("/api/oauth2/kakao").permitAll()
+//                        .requestMatchers("/login/oauth2/code/kakao").permitAll()
+//                        .anyRequest().authenticated()
+//        );
         return httpSecurity.build();
     }
 
