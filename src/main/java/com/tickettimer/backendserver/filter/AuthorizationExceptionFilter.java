@@ -5,6 +5,7 @@ import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.dto.TokenInfo;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.exception.InvalidTokenException;
+import com.tickettimer.backendserver.exception.RefreshTokenNotSameException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -43,6 +44,8 @@ public class AuthorizationExceptionFilter extends OncePerRequestFilter {
         } catch (InvalidTokenException ex) {
             writeErrorResponse(response, HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
         } catch (ExpiredJwtException ex) {
+            writeErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null);
+        } catch (RefreshTokenNotSameException ex) {
             writeErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null);
         }
     }

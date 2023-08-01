@@ -5,6 +5,7 @@ import com.tickettimer.backendserver.filter.AuthenticationExceptionFilter;
 import com.tickettimer.backendserver.filter.AuthorizationExceptionFilter;
 import com.tickettimer.backendserver.filter.JwtAuthenticationFilter;
 import com.tickettimer.backendserver.filter.JwtAuthorizationFilter;
+import com.tickettimer.backendserver.repository.TokenRepository;
 import com.tickettimer.backendserver.service.JwtService;
 import com.tickettimer.backendserver.service.MemberService;
 import com.tickettimer.backendserver.service.PrincipalDetailsService;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final PrincipalDetailsService principalDetailsService;
     private final MemberService memberService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final TokenRepository tokenRepository;
     @Value("${oauth2.member.kakao.password}")
     private String password;
 
@@ -66,7 +68,8 @@ public class SecurityConfig {
                     objectMapper,
                     jwtService,
                     bCryptPasswordEncoder,
-                    password
+                    password,
+                    tokenRepository
             );
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/oauth2/kakao");
             http
@@ -77,7 +80,9 @@ public class SecurityConfig {
                             authenticationManager,
                             jwtService,
                             principalDetailsService,
-                            objectMapper)
+                            objectMapper,
+                            tokenRepository
+                    )
             )
                     .addFilterBefore(new AuthorizationExceptionFilter(objectMapper), JwtAuthorizationFilter.class);
 

@@ -2,18 +2,21 @@ package com.tickettimer.backendserver.service;
 
 import com.tickettimer.backendserver.dto.TokenInfo;
 import com.tickettimer.backendserver.dto.TokenType;
+import com.tickettimer.backendserver.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
-//    private final TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
     @Value("${jwt.secretKey}") //application.properties에 저장되어 있는 값을 가져온다.
     private String secretKey;
     @Value("${jwt.access.expiredMs}") //application.properties에 저장되어 있는 값을 가져온다.
