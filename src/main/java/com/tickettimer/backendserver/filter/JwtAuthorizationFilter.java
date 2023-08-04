@@ -2,12 +2,15 @@ package com.tickettimer.backendserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickettimer.backendserver.auth.PrincipalDetails;
+import com.tickettimer.backendserver.domain.Token;
 import com.tickettimer.backendserver.dto.AuthorizationRequest;
 import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.dto.TokenInfo;
 import com.tickettimer.backendserver.dto.TokenType;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.exception.InvalidTokenException;
+import com.tickettimer.backendserver.exception.RefreshTokenNotSameException;
+import com.tickettimer.backendserver.repository.TokenRepository;
 import com.tickettimer.backendserver.service.JwtService;
 import com.tickettimer.backendserver.service.MemberService;
 import com.tickettimer.backendserver.service.PrincipalDetailsService;
@@ -28,28 +31,34 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Optional;
 
 /**
  * 반환 에러 종류
  * CustomNotFoundException : 멤버를 찾지 못 함
  * InvalidTokenException : jwt의 형태가 아님
  * ExpiredJwtException : jwt의 유효 기간이 만료 됨
+ * RefreshTokenNotSameException : 데이터베이스에 저장된 refresh token 값과 일치하지 않음
  */
 @Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final JwtService jwtService;
     private final PrincipalDetailsService principalDetailsService;
     private final ObjectMapper objectMapper;
+    private final TokenRepository tokenRepository;
 
     public JwtAuthorizationFilter(
             AuthenticationManager authenticationManager,
             JwtService jwtService,
             PrincipalDetailsService principalDetailsService,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper,
+            TokenRepository tokenRepository
+            ) {
         super(authenticationManager);
         this.jwtService=jwtService;
         this.principalDetailsService=principalDetailsService;
         this.objectMapper=objectMapper;
+        this.tokenRepository=tokenRepository;
     }
     @Override
     protected void doFilterInternal(
@@ -80,6 +89,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // refresh token이 만료되었다면 ExpiredJwtException 에러 발생
         if (tokenType.equals(TokenType.REFRESH.getName())) {
             Long id = jwtService.getId(token);
+            // TokenRepository에 저장되어있는 refresh token을 가져와서 동일한지 검사한다.
+            Optional<Token> findToken = tokenRepository.findById(id);
+            // 데이터베이스에 저장된 refresh token이 없거나 일치하지 않을 때
+            if (findToken.isEmpty() || !findToken.get().getRefreshToken().equals(token)) {
+                throw new RefreshTokenNotSameException();
+            }
+
             String serverId = jwtService.getServerId(token);
             String accessToken = jwtService.createAccessToken(serverId, id);
             String refreshToken = jwtService.createRefreshToken(serverId, id);

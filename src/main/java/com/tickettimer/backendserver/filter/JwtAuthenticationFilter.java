@@ -3,10 +3,12 @@ package com.tickettimer.backendserver.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickettimer.backendserver.auth.PrincipalDetails;
 import com.tickettimer.backendserver.domain.Member;
+import com.tickettimer.backendserver.domain.Token;
 import com.tickettimer.backendserver.dto.ResourceType;
 import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.dto.TokenInfo;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
+import com.tickettimer.backendserver.repository.TokenRepository;
 import com.tickettimer.backendserver.service.JwtService;
 import com.tickettimer.backendserver.service.MemberService;
 import jakarta.servlet.FilterChain;
@@ -38,6 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final ObjectMapper objectMapper;
     private final JwtService jwtService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final TokenRepository tokenRepository;
 
     private final String password; // 회원 가입시 넣어줄 비밀번호. application.properties에서 관리
     public JwtAuthenticationFilter(
@@ -46,7 +49,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             ObjectMapper objectMapper,
             JwtService jwtService,
             BCryptPasswordEncoder bCryptPasswordEncoder,
-            String password
+            String password,
+            TokenRepository tokenRepository
     ) {
         this.authenticationManager = authenticationManager;
         this.memberService = memberService;
@@ -54,6 +58,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtService = jwtService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.password = password;
+        this.tokenRepository = tokenRepository;
     }
 
 
@@ -141,6 +146,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         TokenInfo tokenInfo = TokenInfo.builder()
                 .accessToken(serverAccessToken)
                 .refreshToken(refreshToken).build();
+        //TokeknRepository에 refresh token을 저장한다.
+        Token token = new Token(member.getId(), refreshToken);
+        tokenRepository.save(token);
         //서블릿으로 JSON 응답
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
