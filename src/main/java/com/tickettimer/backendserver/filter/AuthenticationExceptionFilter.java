@@ -2,10 +2,6 @@ package com.tickettimer.backendserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickettimer.backendserver.dto.ResultResponse;
-import com.tickettimer.backendserver.dto.TokenInfo;
-import com.tickettimer.backendserver.exception.CustomNotFoundException;
-import com.tickettimer.backendserver.exception.InvalidTokenException;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -4,7 +4,6 @@ import com.tickettimer.backendserver.auth.PrincipalDetails;
 import com.tickettimer.backendserver.domain.Member;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +26,7 @@ public class PrincipalDetailsService implements UserDetailsService{
     public UserDetails loadUserByUsername(String serverId) {
         Optional<Member> member = memberRepository.findByServerId(serverId);
         member.orElseThrow(
-                () -> new CustomNotFoundException("serverId", serverId)
+                () -> new CustomNotFoundException("member serverId", serverId)
         );
 
         return new PrincipalDetails(member.get());
