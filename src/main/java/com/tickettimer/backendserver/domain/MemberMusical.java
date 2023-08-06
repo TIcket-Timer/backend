@@ -2,13 +2,11 @@ package com.tickettimer.backendserver.domain;
 
 import com.tickettimer.backendserver.domain.musical.Musical;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name="ALARM")
 public class MemberMusical {
 
