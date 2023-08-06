@@ -36,6 +36,12 @@ public class MusicalService {
         return musicalRepository.save(musical);
     }
 
+    // 모든 뮤짘러
+    public List<Musical> findAll() {
+        List<Musical> res = musicalRepository.findAll();
+        return res;
+    }
+
     // 삭제
     public void delete(Long id) {
         musicalRepository.deleteById(id);
