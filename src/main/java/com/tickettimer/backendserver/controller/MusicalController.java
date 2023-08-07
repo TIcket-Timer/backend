@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MusicalController {
     private final MusicalService musicalService;
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<ResultResponse> postMusical(@RequestBody Musical musical) {
         System.out.println("musical = " + musical.getId());
         Musical save = musicalService.save(musical);
@@ -26,7 +26,7 @@ public class MusicalController {
                 .result(save).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
     }
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<ResultResponse> getAllMusical() {
         List<Musical> musicals = musicalService.findAll();
         ResultResponse res = ResultResponse.builder()
