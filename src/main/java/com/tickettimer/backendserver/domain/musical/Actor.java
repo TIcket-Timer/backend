@@ -1,11 +1,14 @@
 package com.tickettimer.backendserver.domain.musical;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Actor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +17,7 @@ public class Actor {
     private String profileUrl;
     private String roleName;
     @ManyToOne
+    @JsonIgnore
     private Musical musical;
 
     @Builder

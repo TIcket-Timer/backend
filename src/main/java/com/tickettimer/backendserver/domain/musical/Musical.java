@@ -13,14 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @NoArgsConstructor
 @Table(name="MUSICAL")
 public class Musical {
 
     @Id
-    private String musicalId;
+    private String id;
 
     @Enumerated(EnumType.STRING)
     private SiteCategory siteCategory;
@@ -45,9 +44,9 @@ public class Musical {
     private List<Actor> actors;
 
     @Builder
-    public Musical(String musicalId, SiteCategory siteCategory, String title, String posterUrl, LocalDate startDate,
+    public Musical(String id, SiteCategory siteCategory, String title, String posterUrl, LocalDate startDate,
                    LocalDate endDate, String place, String runningTime, String siteLink) {
-        this.musicalId = musicalId;
+        this.id = id;
         this.siteCategory = siteCategory;
         this.title = title;
         this.posterUrl = posterUrl;

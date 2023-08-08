@@ -35,7 +35,7 @@ class MemberMusicalServiceTest {
         memberService.save(member1);
 
         Musical musical1 = Musical.builder()
-                .musicalId("11111")
+                .id("11111")
                 .siteLink("link")
                 .place("place")
                 .endDate(LocalDate.now())
