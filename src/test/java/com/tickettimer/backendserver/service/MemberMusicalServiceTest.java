@@ -35,7 +35,7 @@ class MemberMusicalServiceTest {
         memberService.save(member1);
 
         Musical musical1 = Musical.builder()
-                .id("11111")
+                .musicalId("11111")
                 .siteLink("link")
                 .place("place")
                 .endDate(LocalDate.now())
@@ -43,7 +43,6 @@ class MemberMusicalServiceTest {
                 .title("title1")
                 .posterUrl("urlurl")
                 .runningTime("80min")
-                .actors("aaaaaa")
                 .siteCategory(SiteCategory.INTERPARK)
                 .build();
         musicalService.save(musical1);
