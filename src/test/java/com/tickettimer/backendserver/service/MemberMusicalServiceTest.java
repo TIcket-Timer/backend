@@ -43,7 +43,6 @@ class MemberMusicalServiceTest {
                 .title("title1")
                 .posterUrl("urlurl")
                 .runningTime("80min")
-                .actors("aaaaaa")
                 .siteCategory(SiteCategory.INTERPARK)
                 .build();
         musicalService.save(musical1);

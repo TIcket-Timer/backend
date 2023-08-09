@@ -22,22 +22,28 @@ public class MusicalService {
     }
 
     // 조회 findById
-    public Musical findById(Long id) {
+    public Musical findById(String id) {
         Optional<Musical> findMusical = musicalRepository.findById(id);
         return findMusical.orElseThrow(
-                () -> new CustomNotFoundException("musicalId", id.toString())
+                () -> new CustomNotFoundException("musicalId", id)
         );
     }
 
     // 수정
-    public Musical update(Long id, Musical newMusical) {
+    public Musical update(String id, Musical newMusical) {
         Musical musical = musicalRepository.findById(id).get();
         musical = newMusical;
         return musicalRepository.save(musical);
     }
 
+    // 모든 뮤짘러
+    public List<Musical> findAll() {
+        List<Musical> res = musicalRepository.findAll();
+        return res;
+    }
+
     // 삭제
-    public void delete(Long id) {
+    public void delete(String id) {
         musicalRepository.deleteById(id);
     }
 }

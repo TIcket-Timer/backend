@@ -25,7 +25,7 @@ public class OAuth2Controller {
     private final MemberRepository memberRepository;
     private final JwtService jwtService;
 
-    @GetMapping("/")
+    @GetMapping
     public String hello() {
         return "hello";
     }
