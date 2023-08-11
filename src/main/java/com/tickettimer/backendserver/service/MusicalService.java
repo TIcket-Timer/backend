@@ -35,15 +35,19 @@ public class MusicalService {
         musical = newMusical;
         return musicalRepository.save(musical);
     }
+    // 삭제
+    public void delete(String id) {
+        musicalRepository.deleteById(id);
+    }
 
     // 모든 뮤짘러
     public List<Musical> findAll() {
         List<Musical> res = musicalRepository.findAll();
         return res;
     }
-
-    // 삭제
-    public void delete(String id) {
-        musicalRepository.deleteById(id);
+    public List<Musical> findBySiteCategory(String siteCategory) {
+        List<Musical> res = musicalRepository.findBySiteCategory(siteCategory);
+        return res;
     }
+
 }
