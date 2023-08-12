@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface MusicalRepository extends JpaRepository<Musical, String> {
-    public List<Musical> findBySiteCategory(String siteCategory);
+    public List<Musical> findBySiteCategory(SiteCategory siteCategory);
 }

@@ -3,6 +3,7 @@ package com.tickettimer.backendserver.service;
 import com.tickettimer.backendserver.domain.Member;
 import com.tickettimer.backendserver.domain.Memo;
 import com.tickettimer.backendserver.domain.musical.Musical;
+import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.MusicalRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class MusicalService {
         List<Musical> res = musicalRepository.findAll();
         return res;
     }
-    public List<Musical> findBySiteCategory(String siteCategory) {
+    public List<Musical> findBySiteCategory(SiteCategory siteCategory) {
         List<Musical> res = musicalRepository.findBySiteCategory(siteCategory);
         return res;
     }

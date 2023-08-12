@@ -8,7 +8,7 @@ import lombok.*;
 @Entity
 @NoArgsConstructor
 @Table(name="ALARM")
-public class MemberMusical {
+public class Alarm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +23,9 @@ public class MemberMusical {
     @JoinColumn(name = "MUSICAL_ID")
     private Musical musical;
     @Builder
-    public MemberMusical(Member member, Musical musical) {
-        member.getMemberMusicals().add(this);
-        musical.getMemberMusicals().add(this);
+    public Alarm(Member member, Musical musical) {
+        member.getAlarms().add(this);
+        musical.getAlarms().add(this);
         this.member=member;
         this.musical=musical;
     }

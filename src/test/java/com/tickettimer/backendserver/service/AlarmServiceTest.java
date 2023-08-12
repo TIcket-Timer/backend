@@ -1,7 +1,7 @@
 package com.tickettimer.backendserver.service;
 
 import com.tickettimer.backendserver.domain.Member;
-import com.tickettimer.backendserver.domain.MemberMusical;
+import com.tickettimer.backendserver.domain.Alarm;
 import com.tickettimer.backendserver.domain.musical.Musical;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import org.junit.jupiter.api.Test;
@@ -11,12 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-class MemberMusicalServiceTest {
+class AlarmServiceTest {
     @Autowired
-    MemberMusicalService memberMusicalService;
+    AlarmService alarmService;
     @Autowired
     MemberService memberService;
     @Autowired
@@ -47,15 +45,15 @@ class MemberMusicalServiceTest {
                 .build();
         musicalService.save(musical1);
 
-        MemberMusical mm1 = MemberMusical.builder()
+        Alarm mm1 = Alarm.builder()
                 .member(member1)
                 .musical(musical1)
                 .build();
-        memberMusicalService.save(mm1);
+        alarmService.save(mm1);
 
-        List<MemberMusical> mml  = memberMusicalService.findByMember(member1);
-        for (MemberMusical memberMusical : mml) {
-            System.out.println(memberMusical.getMember().getNickname() + memberMusical.getMusical().getActors());
+        List<Alarm> mml  = alarmService.findByMember(member1);
+        for (Alarm alarm : mml) {
+            System.out.println(alarm.getMember().getNickname() + alarm.getMusical().getActors());
         }
     }
 }

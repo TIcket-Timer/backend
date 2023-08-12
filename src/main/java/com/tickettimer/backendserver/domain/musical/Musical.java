@@ -1,12 +1,10 @@
 package com.tickettimer.backendserver.domain.musical;
 
-import com.tickettimer.backendserver.domain.Member;
-import com.tickettimer.backendserver.domain.MemberMusical;
+import com.tickettimer.backendserver.domain.Alarm;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class Musical {
 
     private String siteLink;
     @OneToMany(mappedBy = "musical")
-    private List<MemberMusical> memberMusicals = new ArrayList<>();
+    private List<Alarm> alarms = new ArrayList<>();
 
     @OneToMany(mappedBy = "musical")
     private List<Actor> actors;

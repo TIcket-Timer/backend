@@ -1,6 +1,7 @@
 package com.tickettimer.backendserver.controller;
 
 import com.tickettimer.backendserver.domain.musical.Musical;
+import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.service.MusicalService;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +36,11 @@ public class MusicalController {
                 .result(musicals).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
     }
+
     @GetMapping("/{site}")
     public ResponseEntity<ResultResponse> getMusicalBySiteCategory(@PathVariable("site") String site) {
-        List<Musical> musicals = musicalService.findAll();
+        SiteCategory siteCategory = SiteCategory.valueOf(site.toUpperCase());
+        List<Musical> musicals = musicalService.findBySiteCategory(siteCategory);
         ResultResponse res = ResultResponse.builder()
                 .code(HttpStatus.CREATED.value())
                 .message("뮤지컬 정보를 가져왔습니다.")

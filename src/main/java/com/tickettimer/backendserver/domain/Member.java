@@ -19,7 +19,7 @@ public class Member {
     private Long id;
 
     @OneToMany(mappedBy = "member")
-    private List<MemberMusical> memberMusicals = new ArrayList<>();
+    private List<Alarm> alarms = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Memo> memos = new ArrayList<>();
