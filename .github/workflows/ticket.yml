@@ -37,8 +37,8 @@ jobs:
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PWD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
           
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -47,5 +47,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
             docker-compose -f "docker-compose.yml" up -d --build
