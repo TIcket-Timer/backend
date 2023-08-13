@@ -32,6 +32,10 @@ jobs:
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        env :
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
+          REDIS_PASSWORD: 1234
         with:
           arguments: build
             
