@@ -51,4 +51,5 @@ jobs:
           script: |
             docker pull growth123/ticket
             docker stop server
+            docker-compose -f "docker-compose.yml" up -d --build
             docker run -d --rm --name server -p 8080:8080 growth123/ticket
