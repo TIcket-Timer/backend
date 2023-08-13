@@ -3,8 +3,6 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "main" ]
-#  pull_request:
-#    branches: [ "master" ]
 
 permissions:
   contents: read
@@ -39,8 +37,8 @@ jobs:
       - name: Docker build
         run: |
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PWD }}
-          docker build -t growth123/ticket .
-          docker push growth123/ticket
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }}
           
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -49,7 +47,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            docker pull growth123/ticket
-            docker stop server
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }}
             docker-compose -f "docker-compose.yml" up -d --build
-            docker run -d --rm --name server -p 8080:8080 growth123/ticket
