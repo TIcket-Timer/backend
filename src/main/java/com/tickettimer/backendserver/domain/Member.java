@@ -1,6 +1,7 @@
 package com.tickettimer.backendserver.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Memo> memos = new ArrayList<>();
+    @OneToOne(mappedBy = "member")
+    @Setter
+    private FCMToken fcmToken;
 
     private String serverId;
 

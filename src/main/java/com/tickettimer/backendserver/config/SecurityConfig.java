@@ -6,6 +6,7 @@ import com.tickettimer.backendserver.filter.AuthorizationExceptionFilter;
 import com.tickettimer.backendserver.filter.JwtAuthenticationFilter;
 import com.tickettimer.backendserver.filter.JwtAuthorizationFilter;
 import com.tickettimer.backendserver.repository.TokenRepository;
+import com.tickettimer.backendserver.service.FCMTokenService;
 import com.tickettimer.backendserver.service.JwtService;
 import com.tickettimer.backendserver.service.MemberService;
 import com.tickettimer.backendserver.service.PrincipalDetailsService;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final PrincipalDetailsService principalDetailsService;
     private final MemberService memberService;
+    private final FCMTokenService fcmTokenService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenRepository tokenRepository;
     @Value("${oauth2.member.kakao.password}")
@@ -49,12 +51,12 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(
                 sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
-//        httpSecurity.apply(new MyCustom());
-//        httpSecurity.authorizeHttpRequests(
-//                request -> request.requestMatchers("/api/oauth2/kakao").permitAll()
-//                        .requestMatchers("/login/oauth2/code/kakao").permitAll()
-//                        .anyRequest().authenticated()
-//        );
+        httpSecurity.apply(new MyCustom());
+        httpSecurity.authorizeHttpRequests(
+                request -> request.requestMatchers("/api/oauth2/kakao").permitAll()
+                        .requestMatchers("/login/oauth2/code/kakao").permitAll()
+                        .anyRequest().authenticated()
+        );
         return httpSecurity.build();
     }
 
@@ -65,6 +67,7 @@ public class SecurityConfig {
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
                     authenticationManager,
                     memberService,
+                    fcmTokenService,
                     objectMapper,
                     jwtService,
                     bCryptPasswordEncoder,

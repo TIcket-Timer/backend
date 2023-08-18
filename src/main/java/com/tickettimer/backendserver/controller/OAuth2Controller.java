@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController
+//@RestController
 @RequestMapping("/api/oauth2")
 @RequiredArgsConstructor
 public class OAuth2Controller {

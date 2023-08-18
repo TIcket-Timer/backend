@@ -1,7 +1,13 @@
 package com.tickettimer.backendserver.service;
 
+import com.tickettimer.backendserver.domain.FCMToken;
+import com.tickettimer.backendserver.domain.Member;
+import com.tickettimer.backendserver.domain.Token;
 import com.tickettimer.backendserver.dto.TokenInfo;
 import com.tickettimer.backendserver.dto.TokenType;
+import com.tickettimer.backendserver.exception.CustomNotFoundException;
+import com.tickettimer.backendserver.repository.FCMTokenRepository;
+import com.tickettimer.backendserver.repository.MemberRepository;
 import com.tickettimer.backendserver.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -12,11 +18,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
     private final TokenRepository tokenRepository;
+    private final MemberRepository memberRepository;
+    private final FCMTokenRepository fcmTokenRepository;
     @Value("${jwt.secretKey}") //application.properties에 저장되어 있는 값을 가져온다.
     private String secretKey;
     @Value("${jwt.access.expiredMs}") //application.properties에 저장되어 있는 값을 가져온다.
@@ -57,6 +66,14 @@ public class JwtService {
                 .compact();
         return token;
     }
+
+    /**
+     *
+     * @param serverId: oauth2를 통해 만들어진 아이디
+     * @param id: PK, Long 타입 아이디
+     * @return refresh token 반환
+     * redis에 refresh token을 저장한다.
+     */
     public String createRefreshToken(String serverId, Long id) {
         Claims claims = Jwts.claims();
         claims.put("id", id);
@@ -69,8 +86,17 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpiredMs))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-//        Token token1 = new Token(id, token);
-//        tokenRepository.save(token1);
+        Token token1 = new Token(id, token);
+        tokenRepository.save(token1);
+
+        Optional<Member> findMember = memberRepository.findByServerId(serverId);
+        if (findMember.isEmpty()) {
+            throw new CustomNotFoundException("server id", serverId);
+        }
+        else{ // 회원이 존재하면 FCM token 수정 시간 업데이트
+            FCMToken fcmToken = findMember.get().getFcmToken();
+            fcmTokenRepository.save(fcmToken);
+        }
         return token;
     }
 

@@ -2,6 +2,7 @@ package com.tickettimer.backendserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickettimer.backendserver.auth.PrincipalDetails;
+import com.tickettimer.backendserver.domain.FCMToken;
 import com.tickettimer.backendserver.domain.Member;
 import com.tickettimer.backendserver.domain.Token;
 import com.tickettimer.backendserver.dto.ResourceType;
@@ -9,6 +10,7 @@ import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.dto.TokenInfo;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.TokenRepository;
+import com.tickettimer.backendserver.service.FCMTokenService;
 import com.tickettimer.backendserver.service.JwtService;
 import com.tickettimer.backendserver.service.MemberService;
 import jakarta.servlet.FilterChain;
@@ -33,6 +35,7 @@ import java.util.Map;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final MemberService memberService;
+    private final FCMTokenService fcmTokenService;
     private final ObjectMapper objectMapper;
     private final JwtService jwtService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -42,6 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JwtAuthenticationFilter(
             AuthenticationManager authenticationManager,
             MemberService memberService,
+            FCMTokenService fcmTokenService,
             ObjectMapper objectMapper,
             JwtService jwtService,
             BCryptPasswordEncoder bCryptPasswordEncoder,
@@ -50,6 +54,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) {
         this.authenticationManager = authenticationManager;
         this.memberService = memberService;
+        this.fcmTokenService = fcmTokenService;
         this.objectMapper = objectMapper;
         this.jwtService = jwtService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -66,6 +71,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) throws AuthenticationException {
         String resource = request.getHeader("resource"); // resource server 이름 ex) 카카오, 애플
         String accessToken = request.getHeader("Authorization");
+        String fcmToken = request.getHeader("fcmToken");
 
         // 카카오 로그인이라면
         if (resource.equals(ResourceType.KAKAO.getName())) {
@@ -99,7 +105,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             try{
                 // 해당 serverId 데이터베이스 존재 여부. 존재하지 않으면 CustomNotFoundException 반환
-                memberService.findByServerId(serverId);
+                Member member = memberService.findByServerId(serverId);
+                System.out.println("update time = " + member.getFcmToken().getId());
+                System.out.println("update time = " + member.getFcmToken().getModifiedDate());
+                System.out.println("update time = " + member.getFcmToken().getCreatedTime());
+                fcmTokenService.update(member.getFcmToken(), fcmToken);
             } catch(CustomNotFoundException e) {
                 // 해당 유저가 데이터베이스에 없으면 회원가입 처리
                 // 비밀번호는 서버에서 만든 값
@@ -109,6 +119,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         .password(bCryptPasswordEncoder.encode(password))
                         .email(email).build();
                 memberService.save(newMember);
+                FCMToken newFcmToken = FCMToken.builder()
+                                .member(newMember)
+                                        .token(fcmToken)
+                                                .build();
+                FCMToken save = fcmTokenService.save(newFcmToken);
+                System.out.println("update time = " + save.getModifiedDate());
+                System.out.println("update time = " + save.getCreatedTime());
 
             }
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(serverId, password);
