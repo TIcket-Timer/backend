@@ -39,3 +39,4 @@ out/
 application.yml
 application.properties
 KakaoTestController.java
+ticket-timer-service.json

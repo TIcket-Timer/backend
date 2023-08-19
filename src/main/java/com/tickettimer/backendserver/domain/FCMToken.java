@@ -20,6 +20,9 @@ public class FCMToken extends BaseTime {
     @OneToOne
     private Member member;
     private String token;
+    // 알람 기능 활성화 여부
+    @Builder.Default
+    private boolean isActivated = true;
     @Builder
     public FCMToken(Member member, String token) {
         this.member=member;
@@ -29,5 +32,12 @@ public class FCMToken extends BaseTime {
     }
     public void updateToken(String token) {
         this.token = token;
+    }
+
+    public void alarmOn() {
+        this.isActivated = true;
+    }
+    public void alarmOff() {
+        this.isActivated = false;
     }
 }
