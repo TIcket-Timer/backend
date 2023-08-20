@@ -21,12 +21,12 @@ public class FCMToken extends BaseTime {
     private Member member;
     private String token;
     // 알람 기능 활성화 여부
-    @Builder.Default
-    private boolean isActivated = true;
+    private boolean isActivated;
     @Builder
     public FCMToken(Member member, String token) {
         this.member=member;
         this.token=token;
+        this.isActivated=true;
         member.setFcmToken(this);
 
     }

@@ -14,7 +14,6 @@ public class FCMMessageController {
     private final FCMService fcmService;
     @PostMapping("/fcm")
     public String fcm(@RequestBody FCMRequestDto requestDto) {
-        String registrationToken = "메시지를 보낼 기기 토큰";
         Notification notification = Notification.builder()
                 .setTitle(requestDto.getTitle())
                 .setBody(requestDto.getContent()).build();
@@ -23,4 +22,6 @@ public class FCMMessageController {
         System.out.println("response = " + response);
         return "success";
     }
+
+
 }

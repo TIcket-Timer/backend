@@ -11,19 +11,16 @@ import java.io.FileInputStream;
 
 @Configuration
 public class FirebaseConfig {
-    @Value("firebase.service.path")
-    private String path;
-
     @PostConstruct
-    public void init() {
-        try {
+    public void init(){
+        try{
             FileInputStream serviceAccount =
-                    new FileInputStream(path);
+                    new FileInputStream("src/main/resources/ticket-timer-service.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
             FirebaseApp.initializeApp(options);
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
