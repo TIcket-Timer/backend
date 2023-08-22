@@ -24,6 +24,8 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Memo> memos = new ArrayList<>();
+
+    // fcmToken의 경우 FCMToken 엔티티를 생성할 때 생성
     @OneToOne(mappedBy = "member")
     @Setter
     private FCMToken fcmToken;

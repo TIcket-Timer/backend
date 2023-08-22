@@ -39,9 +39,16 @@ public class BeanConfig {
             DateTimeFormatter localDateSerializeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             DateTimeFormatter localDateDeserializeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
+            // LocalDateTime 타입 직렬화, 역직렬화 패턴
+            DateTimeFormatter localDateTimeSerializeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+            DateTimeFormatter localDateTimeDeserializeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+
             // 등록
             builder.serializers(new LocalDateSerializer(localDateSerializeFormatter));
             builder.deserializers(new LocalDateDeserializer(localDateDeserializeFormatter));
+
+            builder.serializers(new LocalDateTimeSerializer(localDateTimeSerializeFormatter));
+            builder.deserializers(new LocalDateTimeDeserializer(localDateTimeDeserializeFormatter));
         };
     }
 

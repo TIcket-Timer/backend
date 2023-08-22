@@ -1,6 +1,7 @@
 package com.tickettimer.backendserver.domain;
 
 import com.tickettimer.backendserver.domain.musical.Musical;
+import com.tickettimer.backendserver.domain.musical.MusicalNotice;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,14 +21,14 @@ public class Alarm {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "MUSICAL_ID")
-    private Musical musical;
+    @JoinColumn(name = "MUSICAL_NOTICE_ID")
+    private MusicalNotice musicalNotice;
     @Builder
-    public Alarm(Member member, Musical musical) {
+    public Alarm(Member member, MusicalNotice musicalNotice) {
         member.getAlarms().add(this);
-        musical.getAlarms().add(this);
+        musicalNotice.getAlarms().add(this);
         this.member=member;
-        this.musical=musical;
+        this.musicalNotice=musicalNotice;
     }
 
 }

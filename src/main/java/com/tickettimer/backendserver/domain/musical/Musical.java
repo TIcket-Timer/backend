@@ -35,8 +35,6 @@ public class Musical {
     private String runningTime;
 
     private String siteLink;
-    @OneToMany(mappedBy = "musical")
-    private List<Alarm> alarms = new ArrayList<>();
 
     @OneToMany(mappedBy = "musical")
     private List<Actor> actors;
