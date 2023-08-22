@@ -3,6 +3,7 @@ package com.tickettimer.backendserver.service;
 import com.tickettimer.backendserver.domain.Member;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
 
