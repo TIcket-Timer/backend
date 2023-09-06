@@ -80,12 +80,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String token = jwt.replace("Bearer ", "");
         String tokenType = jwtService.getTokenType(token);
+        Long id = jwtService.getId(token);
+        request.setAttribute("id", id);
 
         // refresh token이라면 검증 후 access token과 refresh token 재생성 후 반환
         // refresh token이 만료되었다면 ExpiredJwtException 에러 발생
         if (tokenType.equals(TokenType.REFRESH.getName())) {
-            Long id = jwtService.getId(token);
-            request.setAttribute("id", id);
             // TokenRepository에 저장되어있는 refresh token을 가져와서 동일한지 검사한다.
             Optional<Token> findToken = tokenRepository.findById(id);
             // 데이터베이스에 저장된 refresh token이 없거나 일치하지 않을 때

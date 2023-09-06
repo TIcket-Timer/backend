@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.FileInputStream;
 
-@Configuration
+//@Configuration
 public class FirebaseConfig {
     @PostConstruct
     public void init(){

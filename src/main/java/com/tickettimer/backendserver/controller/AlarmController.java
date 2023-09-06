@@ -31,31 +31,32 @@ public class AlarmController {
     @PostMapping
     public ResponseEntity<ResultResponse> postAlarm(
             HttpServletRequest request,
-            @RequestParam String musicalNoticeId
+            @RequestParam("musicalNoticeId") String musicalNoticeId
     ) {
         // Actor 엔티티 생성
-        MusicalNotice musicalNotice = musicalNoticeService.findById(musicalNoticeId);
-        String jwt = (String) request.getHeader("jwt");
-        Long memberId = jwtService.getId(jwt);
-        Member member = memberService.findById(memberId);
-        Alarm alarm = Alarm.builder()
-                .musicalNotice(musicalNotice)
-                .member(member)
-                .build();
-
-        // Actor 저장
-        Alarm save = alarmService.save(alarm);
-        // 결과 반환
-        ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
-                .message(save.getMusicalNotice().getId()+ " : 뮤지컬 정보를 저장했습니다.")
-                .result(musicalNotice).build();
-        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
+        Long id = (Long) request.getAttribute("id");
+        System.out.println("id = " + id);
+//        MusicalNotice musicalNotice = musicalNoticeService.findById(musicalNoticeId);
+//        Member member = memberService.findById(memberId);
+//        Alarm alarm = Alarm.builder()
+//                .musicalNotice(musicalNotice)
+//                .member(member)
+//                .build();
+//
+//        // Actor 저장
+//        Alarm save = alarmService.save(alarm);
+//        // 결과 반환
+//        ResultResponse res = ResultResponse.builder()
+//                .code(HttpStatus.CREATED.value())
+//                .message(save.getMusicalNotice().getId()+ " : 뮤지컬 정보를 저장했습니다.")
+//                .result(musicalNotice).build();
+//        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
+        return null;
     }
-    @PostMapping
+    @DeleteMapping
     public ResponseEntity<ResultResponse> deleteAlarm(
             HttpServletRequest request,
-            @RequestParam Long alarmId
+            @RequestParam("id") Long alarmId
     ) {
         alarmService.delete(alarmId);
         // 결과 반환
