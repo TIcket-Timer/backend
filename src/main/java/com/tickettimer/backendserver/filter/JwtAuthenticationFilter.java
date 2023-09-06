@@ -73,6 +73,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = request.getHeader("Authorization");
         String fcmToken = request.getHeader("fcmToken");
 
+        //컨트롤러에서 사용할 수 있게 header에 토큰 넣어주기
+        request.setAttribute("jwt", accessToken);
+
         // 카카오 로그인이라면
         if (resource.equals(ResourceType.KAKAO.getName())) {
             // header 생성
