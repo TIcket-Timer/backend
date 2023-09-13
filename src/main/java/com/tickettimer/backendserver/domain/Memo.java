@@ -1,5 +1,7 @@
 package com.tickettimer.backendserver.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,15 +23,17 @@ public class Memo {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    private LocalDate createdAt;
+    @Column(columnDefinition = "DATE")
+    @JsonFormat(pattern = "yyyy-mm-dd")
+    private LocalDate date;
 
     private String content;
 
     @Builder
-    public Memo(Member member, LocalDate createdAt, String content) {
-        this.member=member;
-        this.createdAt=createdAt;
-        this.content=content;
+    public Memo(Member member, LocalDate date, String content) {
+        this.member = member;
+        this.date = date;
+        this.content = content;
         member.getMemos().add(this);
     }
 

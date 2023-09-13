@@ -8,8 +8,9 @@ services:
 #      - C:\Users\growth\redis_volume\redis.conf:/usr/local/etc/redis/redis.conf
 #      - C:\Users\growth\redis_volume\data:/data
     restart: always
+
   springboot:
-    image: openjdk:19-alpine
+    image: openjdk:17-oracle
     build:
       context: .
       dockerfile: ./Dockerfile
