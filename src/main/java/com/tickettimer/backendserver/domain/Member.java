@@ -24,6 +24,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Memo> memos = new ArrayList<>();
+
     @OneToOne(mappedBy = "member")
     @Setter
     private FCMToken fcmToken;
