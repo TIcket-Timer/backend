@@ -1,0 +1,21 @@
+### 저장
+POST http://localhost:8080/api/Notice/insert
+Content-Type: application/json
+
+{
+  "musicalId": "1",
+  "openDate": "2023-08-24",
+  "title": "테스트",
+  "url": "테스트"
+}
+
+### 전체 가져오기
+GET http://localhost:8080/api/Notice/read
+
+
+### 해당 공지만 가져오기
+GET http://localhost:8080/api/Notice/read/1
+
+### 삭제하기
+POST http://localhost:8080/api/Notice/delete?musicalId=1
+Content-Type: application/json
