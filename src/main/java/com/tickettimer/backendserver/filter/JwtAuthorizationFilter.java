@@ -83,7 +83,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         Long id = jwtService.getId(token);
         request.setAttribute("id", id);
 
-        Long id = jwtService.getId(token);
         request.setAttribute("id", id);
 
         // refresh token이라면 검증 후 access token과 refresh token 재생성 후 반환

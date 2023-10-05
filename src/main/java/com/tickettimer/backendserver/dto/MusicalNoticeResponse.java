@@ -1,36 +1,25 @@
-package com.tickettimer.backendserver.domain.musical;
+package com.tickettimer.backendserver.dto;
 
-import com.tickettimer.backendserver.domain.Alarm;
-import com.tickettimer.backendserver.domain.BaseTime;
-import jakarta.persistence.*;
+import com.tickettimer.backendserver.domain.musical.SiteCategory;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "MUSICAL_NOTICE")
-public class MusicalNotice extends BaseTime {
-    @Id
-    @Column(name = "MUSICAL_NOTICE_ID")
+public class MusicalNoticeResponse {
     private String id;
-
-    @Enumerated(EnumType.STRING)
     private SiteCategory siteCategory;
     private LocalDateTime openDateTime;
     private String title;
     private String url;
-
-    @OneToMany(mappedBy = "musicalNotice")
-    private List<Alarm> alarms = new ArrayList<>();
-
     @Builder
-    public MusicalNotice(
+    public MusicalNoticeResponse(
             String id,
             SiteCategory siteCategory,
             LocalDateTime openDateTime,
