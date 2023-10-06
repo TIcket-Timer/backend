@@ -108,7 +108,7 @@ class MusicalNoticeRepositoryTest {
                 .siteCategory(SiteCategory.INTERPARK).build();
 
         musicalNoticeRepository.save(musicalNotice2);
-        LocalDateTime dateTime3 = LocalDateTime.now().minus(4, ChronoUnit.DAYS);
+        LocalDateTime dateTime3 = LocalDateTime.now().minus(4, ChronoUnit.HOURS);
 
         MusicalNotice musicalNotice3 = MusicalNotice.builder()
                 .id("12345")
@@ -119,10 +119,14 @@ class MusicalNoticeRepositoryTest {
 
         musicalNoticeRepository.save(musicalNotice3);
 
-        Pageable pageable = PageRequest.of(0, 2);
+        Pageable pageable = PageRequest.of(0, 3);
 
         Page<MusicalNotice> musicalNotices = musicalNoticeRepository.findByOpenDateTimeAfterOrderByOpenDateTime(LocalDateTime.now(), pageable);
         List<MusicalNotice> content = musicalNotices.getContent();
         assertThat(content.size()).isEqualTo(2);
+    }
+    @Test
+    void souttest() {
+        System.out.println("musicalNoticeRepository = " + LocalDateTime.now());
     }
 }
