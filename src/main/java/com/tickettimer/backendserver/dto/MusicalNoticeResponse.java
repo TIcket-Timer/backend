@@ -18,18 +18,21 @@ public class MusicalNoticeResponse {
     private LocalDateTime openDateTime;
     private String title;
     private String url;
+    private String imageUrl;
     @Builder
     public MusicalNoticeResponse(
             String id,
             SiteCategory siteCategory,
             LocalDateTime openDateTime,
             String title,
-            String url
+            String url,
+            String imageUrl
     ) {
         this.id = id;
         this.siteCategory = siteCategory;
         this.openDateTime = openDateTime;
         this.title = title;
         this.url = url;
+        this.imageUrl = imageUrl;
     }
 }

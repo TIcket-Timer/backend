@@ -1,22 +1,21 @@
-package com.tickettimer.backendserver.domain.musical;
+package com.tickettimer.backendserver.dto;
 
-import com.tickettimer.backendserver.domain.Alarm;
-import com.tickettimer.backendserver.domain.BaseTime;
-import jakarta.persistence.*;
+import com.tickettimer.backendserver.domain.musical.Actor;
+import com.tickettimer.backendserver.domain.musical.SiteCategory;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Entity
 @NoArgsConstructor
-@Table(name="MUSICAL")
-public class Musical extends BaseTime {
-
+public class MusicalResponse {
     @Id
     private String id;
 
@@ -41,7 +40,7 @@ public class Musical extends BaseTime {
     private List<Actor> actors;
 
     @Builder
-    public Musical(String id, SiteCategory siteCategory, String title, String posterUrl, LocalDate startDate,
+    public MusicalResponse(String id, SiteCategory siteCategory, String title, String posterUrl, LocalDate startDate,
                    LocalDate endDate, String place, String runningTime, String siteLink) {
         this.id = id;
         this.siteCategory = siteCategory;
@@ -53,5 +52,4 @@ public class Musical extends BaseTime {
         this.runningTime = runningTime;
         this.siteLink = siteLink;
     }
-
 }

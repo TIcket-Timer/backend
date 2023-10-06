@@ -1,10 +1,13 @@
 package com.tickettimer.backendserver.service;
 
 import com.tickettimer.backendserver.domain.musical.Musical;
+import com.tickettimer.backendserver.domain.musical.MusicalNotice;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.MusicalRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +30,12 @@ public class MusicalService {
                 () -> new CustomNotFoundException("musicalId", id)
         );
     }
+    // 최근 등록 조회
+    public List<Musical> findLatestNotice(Pageable pageable) {
+        Page<Musical> musicals = musicalRepository.findAllByOrderByCreatedTimeDesc(pageable);
+        List<Musical> musicalNotices = musicals.getContent();
+        return musicalNotices;
+    }
 
     // 수정
     public Musical update(String id, Musical newMusical) {
@@ -39,13 +48,19 @@ public class MusicalService {
         musicalRepository.deleteById(id);
     }
 
-    // 모든 뮤짘러
+    // 모든 뮤지컬
     public List<Musical> findAll() {
         List<Musical> res = musicalRepository.findAll();
         return res;
     }
-    public List<Musical> findBySiteCategory(SiteCategory siteCategory) {
-        List<Musical> res = musicalRepository.findBySiteCategory(siteCategory);
+    // 모든 뮤지컬 페이징
+    public List<Musical> findAllPagination(Pageable pageable) {
+        Page<Musical> res = musicalRepository.findAll(pageable);
+        List<Musical> musicals = res.getContent();
+        return musicals;
+    }
+    public List<Musical> findBySiteCategory(SiteCategory siteCategory, Pageable pageable) {
+        List<Musical> res = musicalRepository.findBySiteCategory(siteCategory, pageable);
         return res;
     }
 
@@ -54,8 +69,8 @@ public class MusicalService {
      * @param name : 제목
      * @return 뮤지컬 정보 리스트
      */
-    public List<Musical> findByName(String name) {
-        List<Musical> res = musicalRepository.findByName(name);
+    public List<Musical> findByName(String name, Pageable pageable) {
+        List<Musical> res = musicalRepository.findByName(name, pageable);
         return res;
     }
 
