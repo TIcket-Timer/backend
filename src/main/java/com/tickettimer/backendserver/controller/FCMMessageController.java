@@ -19,7 +19,7 @@ public class FCMMessageController {
                 .setBody(requestDto.getContent()).build();
 
         BatchResponse response = fcmService.sendMessageToiAll(notification);
-        System.out.println("response = " + response);
+        System.out.println("response=" + response);
         return "success";
     }
 
