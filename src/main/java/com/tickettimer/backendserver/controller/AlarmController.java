@@ -36,22 +36,21 @@ public class AlarmController {
         // Actor 엔티티 생성
         Long id = (Long) request.getAttribute("id");
         System.out.println("id = " + id);
-//        MusicalNotice musicalNotice = musicalNoticeService.findById(musicalNoticeId);
-//        Member member = memberService.findById(memberId);
-//        Alarm alarm = Alarm.builder()
-//                .musicalNotice(musicalNotice)
-//                .member(member)
-//                .build();
-//
-//        // Actor 저장
-//        Alarm save = alarmService.save(alarm);
-//        // 결과 반환
-//        ResultResponse res = ResultResponse.builder()
-//                .code(HttpStatus.CREATED.value())
-//                .message(save.getMusicalNotice().getId()+ " : 뮤지컬 정보를 저장했습니다.")
-//                .result(musicalNotice).build();
-//        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
-        return null;
+        MusicalNotice musicalNotice = musicalNoticeService.findById(musicalNoticeId);
+        Member member = memberService.findById(id);
+        Alarm alarm = Alarm.builder()
+                .musicalNotice(musicalNotice)
+                .member(member)
+                .build();
+
+        // Actor 저장
+        Alarm save = alarmService.save(alarm);
+        // 결과 반환
+        ResultResponse res = ResultResponse.builder()
+                .code(HttpStatus.CREATED.value())
+                .message(save.getMusicalNotice().getId()+ " : 뮤지컬 정보를 저장했습니다.")
+                .result(musicalNotice).build();
+        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
     }
     @DeleteMapping
     public ResponseEntity<ResultResponse> deleteAlarm(

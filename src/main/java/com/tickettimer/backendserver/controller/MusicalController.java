@@ -33,8 +33,8 @@ public class MusicalController {
     public ResponseEntity<ResultResponse> getAllMusical() {
         List<Musical> musicals = musicalService.findAll();
         ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
-                .message("뮤지컬 정보를 저장했습니다.")
+                .code(HttpStatus.OK.value())
+                .message("뮤지컬 정보를 가져왔습니다.")
                 .result(musicals).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
     }
@@ -44,7 +44,7 @@ public class MusicalController {
         SiteCategory siteCategory = SiteCategory.valueOf(site.toUpperCase());
         List<Musical> musicals = musicalService.findBySiteCategory(siteCategory);
         ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
+                .code(HttpStatus.OK.value())
                 .message("뮤지컬 정보를 가져왔습니다.")
                 .result(musicals).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
@@ -54,7 +54,7 @@ public class MusicalController {
     public ResponseEntity<ResultResponse> searchMusicalByName(@RequestParam("q") String name) {
         List<Musical> musicals = musicalService.findByName(name);
         ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
+                .code(HttpStatus.OK.value())
                 .message("뮤지컬 겁색 결과를 가져왔습니다.")
                 .result(musicals).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
