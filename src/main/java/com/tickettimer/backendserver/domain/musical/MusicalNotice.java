@@ -1,5 +1,6 @@
 package com.tickettimer.backendserver.domain.musical;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickettimer.backendserver.domain.Alarm;
 import com.tickettimer.backendserver.domain.BaseTime;
 import jakarta.persistence.*;
@@ -28,6 +29,7 @@ public class MusicalNotice extends BaseTime {
     private String imageUrl;
 
     @OneToMany(mappedBy = "musicalNotice")
+    @JsonIgnore
     private List<Alarm> alarms = new ArrayList<>();
 
     @Builder

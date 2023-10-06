@@ -1,7 +1,6 @@
 package com.tickettimer.backendserver.service;
 
 import com.tickettimer.backendserver.domain.musical.Musical;
-import com.tickettimer.backendserver.domain.musical.MusicalNotice;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.MusicalRepository;
@@ -69,8 +68,8 @@ public class MusicalService {
      * @param name : 제목
      * @return 뮤지컬 정보 리스트
      */
-    public List<Musical> findByName(String name, Pageable pageable) {
-        List<Musical> res = musicalRepository.findByName(name, pageable);
+    public List<Musical> findByNameAndSite(String name, SiteCategory siteCategory, Pageable pageable) {
+        List<Musical> res = musicalRepository.findByNameAndSiteCategory(name, siteCategory.name(), pageable);
         return res;
     }
 

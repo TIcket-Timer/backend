@@ -3,17 +3,18 @@ package com.tickettimer.backendserver.repository;
 import com.tickettimer.backendserver.domain.musical.Musical;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import jakarta.transaction.Transactional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 @Transactional
 @AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.ANY)
 @DataJpaTest
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MusicalRepositoryTest {
     @Autowired
     private MusicalRepository musicalRepository;
+
     @Test
     @DisplayName("뮤지컬 정보 저장")
     void save() {
@@ -49,4 +51,25 @@ class MusicalRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("뮤지컬 사이트와 제목으로 검색")
+    void search() {
+        Musical musical = Musical.builder()
+                .id("id")
+                .title("title")
+                .place("place")
+                .siteCategory(SiteCategory.INTERPARK)
+                .posterUrl("url")
+                .runningTime("120분")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .siteLink("link")
+                .build();
+
+        Musical save = musicalRepository.save(musical);
+        List<Musical> find = musicalRepository.findByNameAndSiteCategory("title", SiteCategory.INTERPARK.name(), PageRequest.of(0, 1));
+
+        assertThat(find.get(0).getId()).isEqualTo("id");
+
+    }
 }

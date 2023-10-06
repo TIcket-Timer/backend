@@ -1,14 +1,10 @@
 package com.tickettimer.backendserver.controller;
 
 import com.tickettimer.backendserver.domain.musical.Musical;
-import com.tickettimer.backendserver.domain.musical.MusicalNotice;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
-import com.tickettimer.backendserver.dto.MusicalNoticeResponse;
-import com.tickettimer.backendserver.dto.MusicalResponse;
 import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.service.MusicalService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/musicals")
@@ -98,8 +93,8 @@ public class MusicalController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ResultResponse> searchMusicalByName(@RequestParam("q") String name, Pageable pageable) {
-        List<Musical> musicals = musicalService.findByName(name, pageable);
+    public ResponseEntity<ResultResponse> searchMusicalByNameAndSite(@RequestParam("q") String name, @RequestParam("site") SiteCategory siteCategory, Pageable pageable) {
+        List<Musical> musicals = musicalService.findByNameAndSite(name, siteCategory, pageable);
         ResultResponse res = ResultResponse.builder()
                 .code(HttpStatus.OK.value())
                 .message("뮤지컬 겁색 결과를 가져왔습니다.")

@@ -1,5 +1,6 @@
 package com.tickettimer.backendserver.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tickettimer.backendserver.domain.musical.Musical;
 import com.tickettimer.backendserver.domain.musical.MusicalNotice;
 import jakarta.persistence.*;
