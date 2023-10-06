@@ -67,7 +67,7 @@ public class MemoController {
         MemoResponseDto responseDto = new MemoResponseDto(memoService.findById(id));
 
         ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
+                .code(HttpStatus.OK.value())
                 .message("findById 메모 조회")
                 .result(responseDto).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
@@ -82,7 +82,7 @@ public class MemoController {
         AllMemoResponseDto responseDto = new AllMemoResponseDto(memoService.findByMember(member));
 
         ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
+                .code(HttpStatus.OK.value())
                 .message("findByMember 메모 조회")
                 .result(responseDto).build();
 
@@ -94,7 +94,7 @@ public class MemoController {
         memoService.delete(id);
 
         ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
+                .code(HttpStatus.OK.value())
                 .message("메모 삭제")
                 .build();
 
@@ -106,7 +106,7 @@ public class MemoController {
         memoService.update(id, memoRequestDto.getContent());
 
         ResultResponse res = ResultResponse.builder()
-                .code(HttpStatus.CREATED.value())
+                .code(HttpStatus.OK.value())
                 .message("메모 내용 수정")
                 .build();
 
