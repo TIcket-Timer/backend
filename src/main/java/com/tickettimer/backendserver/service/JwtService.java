@@ -86,7 +86,7 @@ public class JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpiredMs))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-        Token token1 = new Token(id, token);
+        Token token1 = new Token(id, token, refreshExpiredMs);
         tokenRepository.save(token1);
 
         Optional<Member> findMember = memberRepository.findByServerId(serverId);

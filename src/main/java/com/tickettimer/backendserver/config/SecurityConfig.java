@@ -37,6 +37,8 @@ public class SecurityConfig {
     @Value("${oauth2.member.kakao.password}")
     private String password;
 
+    @Value("${jwt.refresh.expiredMs}")
+    private Long tokenExpiredMs;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.formLogin(
@@ -72,7 +74,8 @@ public class SecurityConfig {
                     jwtService,
                     bCryptPasswordEncoder,
                     password,
-                    tokenRepository
+                    tokenRepository,
+                    tokenExpiredMs
             );
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/oauth2/kakao");
             http
