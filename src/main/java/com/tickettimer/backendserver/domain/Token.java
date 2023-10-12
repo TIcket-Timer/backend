@@ -6,11 +6,16 @@ import lombok.Getter;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
-@RedisHash(value = "token", timeToLive = 30)
+import java.util.concurrent.TimeUnit;
+
+@RedisHash(value = "token")
 @AllArgsConstructor
 @Getter
 public class Token {
     @Id
     private Long id;
     private String refreshToken;
+
+    @TimeToLive(unit = TimeUnit.MILLISECONDS)
+    private Long expiration;
 }

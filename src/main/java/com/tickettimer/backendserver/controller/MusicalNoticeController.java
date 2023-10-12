@@ -2,6 +2,7 @@ package com.tickettimer.backendserver.controller;
 
 import com.tickettimer.backendserver.domain.musical.Musical;
 import com.tickettimer.backendserver.domain.musical.MusicalNotice;
+import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import com.tickettimer.backendserver.dto.MusicalNoticeResponse;
 import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.service.MusicalNoticeService;
@@ -65,6 +66,17 @@ public class MusicalNoticeController {
                 .code(HttpStatus.OK.value())
                 .message("최근 등록된 뮤지컬 정보를 가져왔습니다.")
                 .result(response).build();
+        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
+    }
+
+    // 검색
+    @GetMapping("/search")
+    public ResponseEntity<ResultResponse> searchMusicalNotices(@RequestParam("q") String name, Pageable pageable) {
+        List<MusicalNotice> musicalNotices = musicalNoticeService.findBySearch(name, pageable);
+        ResultResponse res = ResultResponse.builder()
+                .code(HttpStatus.OK.value())
+                .message("뮤지컬 공지 겁색 결과를 가져왔습니다.")
+                .result(musicalNotices).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
     }
 }

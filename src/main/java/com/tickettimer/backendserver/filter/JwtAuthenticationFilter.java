@@ -40,6 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final JwtService jwtService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenRepository tokenRepository;
+    private final Long tokenExpiredMs;
 
     private final String password; // 회원 가입시 넣어줄 비밀번호. application.properties에서 관리
     public JwtAuthenticationFilter(
@@ -50,7 +51,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             JwtService jwtService,
             BCryptPasswordEncoder bCryptPasswordEncoder,
             String password,
-            TokenRepository tokenRepository
+            TokenRepository tokenRepository,
+            Long tokenExpiredMs
     ) {
         this.authenticationManager = authenticationManager;
         this.memberService = memberService;
@@ -59,6 +61,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.jwtService = jwtService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.password = password;
+        this.tokenExpiredMs = tokenExpiredMs;
         this.tokenRepository = tokenRepository;
     }
 
@@ -161,7 +164,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .accessToken(serverAccessToken)
                 .refreshToken(refreshToken).build();
         //TokeknRepository에 refresh token을 저장한다.
-        Token token = new Token(member.getId(), refreshToken);
+        Token token = new Token(member.getId(), refreshToken, tokenExpiredMs);
         tokenRepository.save(token);
         //서블릿으로 JSON 응답
         response.setStatus(HttpServletResponse.SC_OK);

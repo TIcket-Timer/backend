@@ -126,7 +126,35 @@ class MusicalNoticeRepositoryTest {
         assertThat(content.size()).isEqualTo(2);
     }
     @Test
-    void souttest() {
-        System.out.println("musicalNoticeRepository = " + LocalDateTime.now());
+    @DisplayName("검색 테스트")
+    void findBySearchTest() {
+        MusicalNotice musicalNotice1 = MusicalNotice.builder()
+                .id("123")
+                .title("title")
+                .openDateTime(LocalDateTime.now())
+                .url("url")
+                .siteCategory(SiteCategory.INTERPARK).build();
+        musicalNoticeRepository.save(musicalNotice1);
+        MusicalNotice musicalNotice2 = MusicalNotice.builder()
+                .id("1234")
+                .title("hello title")
+                .openDateTime(LocalDateTime.now())
+                .url("url")
+                .siteCategory(SiteCategory.INTERPARK).build();
+        musicalNoticeRepository.save(musicalNotice2);
+        MusicalNotice musicalNotice3 = MusicalNotice.builder()
+                .id("1253")
+                .title("titl")
+                .openDateTime(LocalDateTime.now())
+                .url("url")
+                .siteCategory(SiteCategory.INTERPARK).build();
+        musicalNoticeRepository.save(musicalNotice3);
+
+        Pageable pageable = PageRequest.of(0, 3);
+        Page<MusicalNotice> musicalNotices = musicalNoticeRepository.findBySearch("title", pageable);
+        List<MusicalNotice> content = musicalNotices.getContent();
+        System.out.println("content = " + content.size());
+        assertThat(content.size()).isEqualTo(2);
     }
+
 }
