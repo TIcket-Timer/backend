@@ -42,6 +42,14 @@ public class MusicalNoticeService {
         List<MusicalNotice> musicalNotices = musicalNoticePage.getContent();
         return musicalNotices;
     }
+
+    // 제목으로 검색
+    public List<MusicalNotice> findBySearch(String name, Pageable pageable) {
+        Page<MusicalNotice> musicalNoticePage = musicalNoticeRepository.findBySearch(name, pageable);
+        List<MusicalNotice> musicalNotices = musicalNoticePage.getContent();
+        return musicalNotices;
+    }
+
 //
 //    public void delete(String id) {
 //        musicalNoticeRepository.deleteById(id);
