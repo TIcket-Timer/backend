@@ -25,6 +25,10 @@ jobs:
       - run: touch ./src/main/resources/application.properties
       - run: echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
       - run: cat ./src/main/resources/application.properties
+      - run: mkdir -p ./src/test/resources
+      - run: touch ./src/test/resources/application.properties
+      - run: echo "${{ secrets.PROPERTIES_TEST }}" > ./src/test/resources/application.properties
+      - run: cat ./src/test/resources/application.properties
 
       - name: Run chmod to make gradlew executable
         run: chmod +x ./gradlew

@@ -46,6 +46,7 @@ class AlarmServiceTest {
         Alarm alarm = Alarm.builder()
                 .member(member1)
                 .musicalNotice(musicalNotice1)
+                .alarmTimes(List.of(1, 2, 3))
                 .build();
         alarmService.save(alarm);
 

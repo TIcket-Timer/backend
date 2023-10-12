@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +55,8 @@ class AlarmRepositoryTest {
 
         Alarm alarm = Alarm.builder()
                 .member(member)
-                .musicalNotice(musicalNotice).build();
+                .musicalNotice(musicalNotice)
+                .alarmTimes(List.of(1, 2, 3)).build();
 
         Alarm save = alarmRepository.save(alarm);
 
@@ -95,10 +97,12 @@ class AlarmRepositoryTest {
         musicalNoticeRepository.save(musicalNotice2);
         Alarm alarm1 = Alarm.builder()
                 .member(member)
-                .musicalNotice(musicalNotice1).build();
+                .musicalNotice(musicalNotice1)
+                .alarmTimes(List.of(1, 2, 3)).build();
         Alarm alarm2 = Alarm.builder()
                 .member(member)
-                .musicalNotice(musicalNotice1).build();
+                .musicalNotice(musicalNotice1)
+                .alarmTimes(List.of(1, 2, 3)).build();
 
         Alarm save1 = alarmRepository.save(alarm1);
         Alarm save2 = alarmRepository.save(alarm2);
