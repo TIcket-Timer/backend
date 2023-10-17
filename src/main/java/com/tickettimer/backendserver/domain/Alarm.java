@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name="ALARM")
+@Table
 public class Alarm {
 
     @Id

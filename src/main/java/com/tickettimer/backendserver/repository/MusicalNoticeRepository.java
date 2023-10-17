@@ -16,6 +16,6 @@ public interface MusicalNoticeRepository extends JpaRepository<MusicalNotice, St
     Page<MusicalNotice> findAllByOrderByCreatedTimeDesc(Pageable pageable);
     Page<MusicalNotice> findByOpenDateTimeAfterOrderByOpenDateTime(LocalDateTime localDateTime, Pageable pageable);
 
-    @Query(value = "select * from MUSICAL_NOTICE where title like %:name%", nativeQuery = true)
+    @Query(value = "select * from musical_notice where title like %:name%", nativeQuery = true)
     Page<MusicalNotice> findBySearch(@Param("name") String name, Pageable pageable);
 }

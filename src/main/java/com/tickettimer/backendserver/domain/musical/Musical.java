@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name="MUSICAL")
+@Table
 public class Musical extends BaseTime {
 
     @Id

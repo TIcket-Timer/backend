@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
-@Table(name="MEMBER")
+@Table
 public class Member {
 
     @Id

@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "MUSICAL_NOTICE")
+@Table
 public class MusicalNotice extends BaseTime {
     @Id
     @Column(name = "MUSICAL_NOTICE_ID")
