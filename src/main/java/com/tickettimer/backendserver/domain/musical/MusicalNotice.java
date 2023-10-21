@@ -26,7 +26,9 @@ public class MusicalNotice extends BaseTime {
     private LocalDateTime openDateTime;
     private String title;
     private String url;
+    private String content;
     private String imageUrl;
+
 
     @OneToMany(mappedBy = "musicalNotice")
     @JsonIgnore
@@ -39,7 +41,8 @@ public class MusicalNotice extends BaseTime {
             LocalDateTime openDateTime,
             String title,
             String url,
-            String imageUrl
+            String imageUrl,
+            String content
     ) {
         this.id = id;
         this.siteCategory = siteCategory;
@@ -47,5 +50,6 @@ public class MusicalNotice extends BaseTime {
         this.title = title;
         this.url = url;
         this.imageUrl = imageUrl;
+        this.content = content;
     }
 }

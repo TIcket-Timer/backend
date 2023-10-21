@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MusicalNoticeController {
     private final MusicalNoticeService musicalNoticeService;
+
     @PostMapping
     public ResponseEntity<ResultResponse> postMusical(@RequestBody MusicalNotice musicalNotice) {
         MusicalNotice save = musicalNoticeService.save(musicalNotice);
@@ -28,6 +29,17 @@ public class MusicalNoticeController {
                 .code(HttpStatus.CREATED.value())
                 .message(save.getId() + " : 뮤지컬 공지 정보를 저장했습니다.")
                 .result(save).build();
+        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
+    }
+
+    // 아이디로 뮤지컬 공지 정보 검색
+    @GetMapping("/deadline/{id}")
+    public ResponseEntity<ResultResponse> findMusicalById(@PathVariable("id") String id) {
+        MusicalNotice musicalNotice = musicalNoticeService.findById(id);
+        ResultResponse res = ResultResponse.builder()
+                .code(HttpStatus.OK.value())
+                .message("뮤지컬 공지 정보를 가져왔습니다.")
+                .result(musicalNotice).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
     }
     // 마감 기한 임박한 뮤지컬 정보

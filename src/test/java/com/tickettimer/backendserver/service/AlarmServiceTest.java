@@ -6,20 +6,18 @@ import com.tickettimer.backendserver.domain.musical.Musical;
 import com.tickettimer.backendserver.domain.musical.MusicalNotice;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AlarmServiceTest {
-    @Autowired
     AlarmService alarmService;
-    @Autowired
     MemberService memberService;
-    @Autowired
     MusicalNoticeService musicalNoticeService;
 
 
