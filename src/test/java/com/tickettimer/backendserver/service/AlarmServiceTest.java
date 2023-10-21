@@ -14,10 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-@ExtendWith(MockitoExtension.class)
+
+@SpringBootTest
 class AlarmServiceTest {
+    @Autowired
     AlarmService alarmService;
+    @Autowired
     MemberService memberService;
+    @Autowired
     MusicalNoticeService musicalNoticeService;
 
 
@@ -48,6 +52,6 @@ class AlarmServiceTest {
                 .build();
         alarmService.save(alarm);
 
-        List<Alarm> mml  = alarmService.findByMember(member1);
+        List<Alarm> mml = alarmService.findByMember(member1);
     }
 }
