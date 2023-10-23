@@ -22,7 +22,17 @@ public class MusicalController {
     @PostMapping
     public ResponseEntity<ResultResponse> postMusical(@RequestBody Musical musical) {
         System.out.println("musical = " + musical.getId());
-        Musical save = musicalService.save(musical);
+        Musical newMusical = Musical.builder()
+                .id(musical.getSiteCategory().getName()+musical.getId())
+                .title(musical.getTitle())
+                .place(musical.getPlace())
+                .siteLink(musical.getSiteLink())
+                .startDate(musical.getStartDate())
+                .endDate(musical.getEndDate())
+                .runningTime(musical.getRunningTime())
+                .posterUrl(musical.getPosterUrl())
+                .build();
+        Musical save = musicalService.save(newMusical);
         ResultResponse res = ResultResponse.builder()
                 .code(HttpStatus.CREATED.value())
                 .message(save.getId() + " : 뮤지컬 정보를 저장했습니다.")

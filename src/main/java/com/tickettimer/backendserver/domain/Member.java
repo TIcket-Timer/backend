@@ -30,13 +30,19 @@ public class Member {
     private FCMToken fcmToken;
 
     private String serverId;
-
+    @Setter
     private String nickname;
 
     private String email;
 
     private String profileUrl;
     private String password;
+    @Setter
+    private boolean interAlarm;
+    @Setter
+    private boolean melonAlarm;
+    @Setter
+    private boolean yesAlarm;
 
     @Builder
     public Member(String serverId, String nickname, String email, String profileUrl, String password) {
@@ -44,7 +50,10 @@ public class Member {
         this.nickname=nickname;
         this.email=email;
         this.profileUrl=profileUrl;
-        this.password=password;
+        this.password = password;
+        this.interAlarm = true;
+        this.melonAlarm = true;
+        this. yesAlarm = true;
     }
 
 }
