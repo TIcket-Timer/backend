@@ -30,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -102,7 +103,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String serverId = "kakao" + map.get("id");
 
             // 닉네임
-            String nickname = (String) properties.get("nickname");
+//            String nickname = (String) properties.get("nickname");
+            String nickname = UUID.randomUUID().toString();
 
             // 이메일
             String email = (String) kakaoAccount.get("email");

@@ -1,6 +1,7 @@
 package com.tickettimer.backendserver.service;
 
 import com.tickettimer.backendserver.domain.Member;
+import com.tickettimer.backendserver.domain.musical.SiteCategory;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -37,5 +38,33 @@ public class MemberService {
         return findMember.orElseThrow(
                 () -> new CustomNotFoundException("id", serverId)
         );
+    }
+
+    // fcm 알람 받기 등록
+    public void updateFcmAlarm(Long id , SiteCategory siteCategory, boolean bool) {
+
+        Optional<Member> findMember = memberRepository.findById(id);
+        if (findMember.isEmpty()) {
+            throw new CustomNotFoundException("id", id.toString());
+        }
+        Member member = findMember.get();
+        if (siteCategory == SiteCategory.INTERPARK) {
+            member.setInterAlarm(bool);
+        } else if (siteCategory == SiteCategory.YES24){
+            member.setYesAlarm(bool);
+        } else if (siteCategory == SiteCategory.MELON) {
+            member.setMelonAlarm(bool);
+        }
+        memberRepository.save(member);
+    }
+
+    public void updateNickname(Long id, String name) {
+        Optional<Member> findMember = memberRepository.findById(id);
+        if (findMember.isEmpty()) {
+            throw new CustomNotFoundException("id", id.toString());
+        }
+        Member member = findMember.get();
+        member.setNickname(name);
+        memberRepository.save(member);
     }
 }

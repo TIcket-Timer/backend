@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member save(Member member);
     Optional<Member> findByServerId(String serverId);
+
 }

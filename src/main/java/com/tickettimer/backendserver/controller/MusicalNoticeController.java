@@ -24,7 +24,18 @@ public class MusicalNoticeController {
 
     @PostMapping
     public ResponseEntity<ResultResponse> postMusical(@RequestBody MusicalNotice musicalNotice) {
-        MusicalNotice save = musicalNoticeService.save(musicalNotice);
+        // 새로운 MusicalNotice 생성
+        // 새로 생성하는 이유는 id를 다르게 하기 위해서임
+        // 한 사이트 내부에서는 서로 다른 뮤지컬 공지의 id가 동일할 일은 없지만 다른 사이트 끼리는 동일할 수도 있기 때문
+        MusicalNotice newMusicalNotice = MusicalNotice.builder()
+                .id(musicalNotice.getSiteCategory().getName() + musicalNotice.getId())
+                .title(musicalNotice.getTitle())
+                .siteCategory(musicalNotice.getSiteCategory())
+                .url(musicalNotice.getUrl())
+                .content(musicalNotice.getContent())
+                .openDateTime(musicalNotice.getOpenDateTime())
+                .build();
+        MusicalNotice save = musicalNoticeService.save(newMusicalNotice);
         ResultResponse res = ResultResponse.builder()
                 .code(HttpStatus.CREATED.value())
                 .message(save.getId() + " : 뮤지컬 공지 정보를 저장했습니다.")
@@ -33,7 +44,7 @@ public class MusicalNoticeController {
     }
 
     // 아이디로 뮤지컬 공지 정보 검색
-    @GetMapping("/deadline/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResultResponse> findMusicalById(@PathVariable("id") String id) {
         MusicalNotice musicalNotice = musicalNoticeService.findById(id);
         ResultResponse res = ResultResponse.builder()
