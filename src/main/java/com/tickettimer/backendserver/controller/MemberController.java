@@ -2,9 +2,7 @@ package com.tickettimer.backendserver.controller;
 
 import com.tickettimer.backendserver.domain.Member;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
-import com.tickettimer.backendserver.dto.FcmAlarmDto;
-import com.tickettimer.backendserver.dto.MemberInfo;
-import com.tickettimer.backendserver.dto.ResultResponse;
+import com.tickettimer.backendserver.dto.*;
 import com.tickettimer.backendserver.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -49,18 +47,37 @@ public class MemberController {
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
 
     }
+    @GetMapping("/alarms")
+    public ResponseEntity<ResultResponse> getFcmAlarm(
+            HttpServletRequest request
+    ) {
+
+        Long id = (Long) request.getAttribute("id");
+        Member member = memberService.findById(id);
+        MemberAlarmResponse alarm = MemberAlarmResponse.builder()
+                .interAlarm(member.isInterAlarm())
+                .yesAlarm(member.isYesAlarm())
+                .melonAlarm(member.isMelonAlarm()).build();
+
+        ResultResponse res = ResultResponse.builder()
+                .code(HttpStatus.OK.value())
+                .message("사이트별 알람 설정 정보를 가져왔습니다.:")
+                .result(alarm).build();
+        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
+
+    }
 
     @PatchMapping("/nickname")
     public ResponseEntity<ResultResponse> updateNickname(
             HttpServletRequest request,
-            @RequestBody String name
+            @RequestBody NicknameChange nicknameChange
     ) {
         Long id = (Long) request.getAttribute("id");
-        memberService.updateNickname(id, name);
+        memberService.updateNickname(id, nicknameChange.getName());
         ResultResponse res = ResultResponse.builder()
                 .code(HttpStatus.OK.value())
                 .message("별명을 변경했습니다.")
-                .result(name).build();
+                .result(nicknameChange.getName()).build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
 
     }

@@ -53,7 +53,7 @@ public class Member {
         this.password = password;
         this.interAlarm = true;
         this.melonAlarm = true;
-        this. yesAlarm = true;
+        this.yesAlarm = true;
     }
 
 }
