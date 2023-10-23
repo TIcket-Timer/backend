@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberInfo {
     String nickname;
+    String email;
 }

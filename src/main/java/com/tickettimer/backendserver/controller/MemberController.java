@@ -24,7 +24,7 @@ public class MemberController {
     ) {
         Long id = (Long) request.getAttribute("id");
         Member member = memberService.findById(id);
-        MemberInfo memberInfo = new MemberInfo(member.getNickname());
+        MemberInfo memberInfo = new MemberInfo(member.getNickname(), member.getEmail());
         ResultResponse res = ResultResponse.builder()
                 .code(HttpStatus.OK.value())
                 .message("내 정보를 가져왔습니다.")

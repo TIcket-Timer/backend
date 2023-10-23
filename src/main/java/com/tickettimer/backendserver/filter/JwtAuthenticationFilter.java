@@ -103,8 +103,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String serverId = "kakao" + map.get("id");
 
             // 닉네임
+            // 닉네임은 중복 가능
+            // UUID는 식별하기보다는 단순히 랜덤 문자열을 생성하기 위해서 사용
 //            String nickname = (String) properties.get("nickname");
-            String nickname = UUID.randomUUID().toString();
+            String nickname = UUID.randomUUID().toString().substring(0, 9);
 
             // 이메일
             String email = (String) kakaoAccount.get("email");

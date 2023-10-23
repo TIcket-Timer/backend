@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,12 +49,10 @@ public class MemberService {
             throw new CustomNotFoundException("id", id.toString());
         }
         Member member = findMember.get();
-        if (siteCategory == SiteCategory.INTERPARK) {
-            member.setInterAlarm(bool);
-        } else if (siteCategory == SiteCategory.YES24){
-            member.setYesAlarm(bool);
-        } else if (siteCategory == SiteCategory.MELON) {
-            member.setMelonAlarm(bool);
+        switch (siteCategory) {
+            case INTERPARK -> member.setInterAlarm(bool);
+            case YES24 -> member.setYesAlarm(bool);
+            case MELON -> member.setMelonAlarm(bool);
         }
         memberRepository.save(member);
     }
@@ -66,5 +65,13 @@ public class MemberService {
         Member member = findMember.get();
         member.setNickname(name);
         memberRepository.save(member);
+    }
+
+    public List<Member> findMemberBySiteAlarm(SiteCategory siteCategory) {
+        return switch (siteCategory) {
+            case INTERPARK -> memberRepository.findByInterAlarm(true);
+            case YES24 -> memberRepository.findByYesAlarm(true);
+            case MELON -> memberRepository.findByMelonAlarm(true);
+        };
     }
 }

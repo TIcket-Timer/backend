@@ -31,7 +31,6 @@ public class Member {
 
     private String serverId;
     @Setter
-
     private String nickname;
 
     private String email;
