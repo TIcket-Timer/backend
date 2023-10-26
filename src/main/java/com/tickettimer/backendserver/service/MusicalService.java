@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,21 @@ public class MusicalService {
         return findMusical.orElseThrow(
                 () -> new CustomNotFoundException("musicalId", id)
         );
+    }
+
+    // id 리스트로 받으면 리스트로 뮤지컬 반환
+    // 탑 랭킹 구할 때 사용
+    // TopRankingService에서 id 리스트 받아서 여기에 넘겨줌
+    public List<Musical> findByIds(List<String> ids) {
+        List<Musical> musicals = new ArrayList<>();
+        for (String id : ids) {
+            Optional<Musical> musical = musicalRepository.findById(id);
+            if (musical.isEmpty()) {
+                throw new CustomNotFoundException("musicalId", id);
+            }
+            musicals.add(musical.get());
+        }
+        return musicals;
     }
     // 최근 등록 조회
     public List<Musical> findLatestNotice(Pageable pageable) {
