@@ -121,9 +121,9 @@ public class MusicalController {
 
     // 탑 랭킹 관련
     @GetMapping("/ranking")
-    public ResponseEntity<ResultResponse> findTopRankingMusical(@RequestParam("site") SiteCategory siteCategory, Pageable pageable) {
+    public ResponseEntity<ResultResponse> findTopRankingMusical(@RequestParam("site") String name, Pageable pageable) {
         // 해당 사이트의 top ranking 뮤지컬 아이디 가져옴
-        TopRanking topRanking = topRankingService.findById(siteCategory.getName());
+        TopRanking topRanking = topRankingService.findById(name.toUpperCase());
         List<String> musicalIds = topRanking.getMusicalIds();
 
         // 아이디 리스트를 바탕으로 해당 뮤지컬 정보를 전부 가져옴
