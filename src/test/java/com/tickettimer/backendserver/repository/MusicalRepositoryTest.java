@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +37,8 @@ class MusicalRepositoryTest {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
                 .siteLink("link")
+                .age("전체연령")
+                .price(Arrays.asList("vip : 100000", "s : 80000"))
                 .build();
 
         Musical save = musicalRepository.save(musical);
@@ -64,6 +67,8 @@ class MusicalRepositoryTest {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
                 .siteLink("link")
+                .age("전체연령")
+                .price(Arrays.asList("vip : 100000", "s : 80000"))
                 .build();
 
         Musical save = musicalRepository.save(musical);

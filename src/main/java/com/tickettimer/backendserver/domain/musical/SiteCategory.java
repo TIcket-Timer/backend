@@ -18,7 +18,7 @@ public enum SiteCategory {
 
     @JsonCreator
     public static SiteCategory from(String val) {
-        return SiteCategory.valueOf(val);
+        return SiteCategory.valueOf(val.toUpperCase());
     }
 
 }

@@ -29,6 +29,7 @@ public class MusicalController {
         System.out.println("musical = " + musical.getId());
         Musical newMusical = Musical.builder()
                 .id(musical.getSiteCategory().getName() + musical.getId())
+                .siteCategory(musical.getSiteCategory())
                 .title(musical.getTitle())
                 .place(musical.getPlace())
                 .siteLink(musical.getSiteLink())
@@ -36,7 +37,10 @@ public class MusicalController {
                 .endDate(musical.getEndDate())
                 .runningTime(musical.getRunningTime())
                 .posterUrl(musical.getPosterUrl())
+                .age(musical.getAge())
+                .price(musical.getPrice())
                 .build();
+
         Musical save = musicalService.save(newMusical);
         ResultResponse res = ResultResponse.builder()
                 .code(HttpStatus.CREATED.value())

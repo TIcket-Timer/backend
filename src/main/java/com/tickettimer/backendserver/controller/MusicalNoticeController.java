@@ -32,7 +32,7 @@ public class MusicalNoticeController {
                 .title(musicalNotice.getTitle())
                 .siteCategory(musicalNotice.getSiteCategory())
                 .url(musicalNotice.getUrl())
-                .content(musicalNotice.getContent())
+//                .content(musicalNotice.getContent())
                 .openDateTime(musicalNotice.getOpenDateTime())
                 .build();
         MusicalNotice save = musicalNoticeService.save(newMusicalNotice);
@@ -61,7 +61,7 @@ public class MusicalNoticeController {
                 m -> MusicalNoticeResponse.builder()
                         .id(m.getId())
                         .url(m.getUrl())
-                        .imageUrl(m.getImageUrl())
+//                        .imageUrl(m.getImageUrl())
                         .title(m.getTitle())
                         .openDateTime(m.getOpenDateTime())
                         .siteCategory(m.getSiteCategory()).build()
@@ -80,7 +80,7 @@ public class MusicalNoticeController {
                 m -> MusicalNoticeResponse.builder()
                         .id(m.getId())
                         .url(m.getUrl())
-                        .imageUrl(m.getImageUrl())
+//                        .imageUrl(m.getImageUrl())
                         .title(m.getTitle())
                         .openDateTime(m.getOpenDateTime())
                         .siteCategory(m.getSiteCategory()).build()
