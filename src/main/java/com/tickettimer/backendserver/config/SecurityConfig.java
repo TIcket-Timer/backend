@@ -6,10 +6,7 @@ import com.tickettimer.backendserver.filter.AuthorizationExceptionFilter;
 import com.tickettimer.backendserver.filter.JwtAuthenticationFilter;
 import com.tickettimer.backendserver.filter.JwtAuthorizationFilter;
 import com.tickettimer.backendserver.repository.TokenRepository;
-import com.tickettimer.backendserver.service.FCMTokenService;
-import com.tickettimer.backendserver.service.JwtService;
-import com.tickettimer.backendserver.service.MemberService;
-import com.tickettimer.backendserver.service.PrincipalDetailsService;
+import com.tickettimer.backendserver.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +31,7 @@ public class SecurityConfig {
     private final FCMTokenService fcmTokenService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenRepository tokenRepository;
+    private final AppleService appleService;
     @Value("${oauth2.member.kakao.password}")
     private String password;
 
@@ -75,9 +73,10 @@ public class SecurityConfig {
                     bCryptPasswordEncoder,
                     password,
                     tokenRepository,
-                    tokenExpiredMs
+                    tokenExpiredMs,
+                    appleService
             );
-            jwtAuthenticationFilter.setFilterProcessesUrl("/api/oauth2/kakao");
+            jwtAuthenticationFilter.setFilterProcessesUrl("/api/oauth2");
             http
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterBefore(new AuthenticationExceptionFilter(objectMapper), JwtAuthenticationFilter.class)

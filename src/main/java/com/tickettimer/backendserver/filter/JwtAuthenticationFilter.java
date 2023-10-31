@@ -10,6 +10,7 @@ import com.tickettimer.backendserver.dto.ResultResponse;
 import com.tickettimer.backendserver.dto.TokenInfo;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.TokenRepository;
+import com.tickettimer.backendserver.service.AppleService;
 import com.tickettimer.backendserver.service.FCMTokenService;
 import com.tickettimer.backendserver.service.JwtService;
 import com.tickettimer.backendserver.service.MemberService;
@@ -42,6 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenRepository tokenRepository;
     private final Long tokenExpiredMs;
+    private final AppleService appleService;
 
     private final String password; // 회원 가입시 넣어줄 비밀번호. application.properties에서 관리
     public JwtAuthenticationFilter(
@@ -53,7 +55,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             BCryptPasswordEncoder bCryptPasswordEncoder,
             String password,
             TokenRepository tokenRepository,
-            Long tokenExpiredMs
+            Long tokenExpiredMs,
+            AppleService appleService
     ) {
         this.authenticationManager = authenticationManager;
         this.memberService = memberService;
@@ -64,6 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.password = password;
         this.tokenExpiredMs = tokenExpiredMs;
         this.tokenRepository = tokenRepository;
+        this.appleService = appleService;
     }
 
 
@@ -76,6 +80,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String resource = request.getHeader("resource"); // resource server 이름 ex) 카카오, 애플
         String accessToken = request.getHeader("Authorization");
         String fcmToken = request.getHeader("fcmToken");
+        log.info("소셜 로그인 시도 resource : {}", resource);
 
 
         // 카카오 로그인이라면
@@ -114,9 +119,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             try{
                 // 해당 serverId 데이터베이스 존재 여부. 존재하지 않으면 CustomNotFoundException 반환
                 Member member = memberService.findByServerId(serverId);
-                System.out.println("update time = " + member.getFcmToken().getId());
-                System.out.println("update time = " + member.getFcmToken().getModifiedDate());
-                System.out.println("update time = " + member.getFcmToken().getCreatedTime());
                 fcmTokenService.update(member.getFcmToken(), fcmToken);
             } catch(CustomNotFoundException e) {
                 // 해당 유저가 데이터베이스에 없으면 회원가입 처리
@@ -140,9 +142,37 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             return authenticate;
 
-        } else if (resource == ResourceType.APPLE.getName()){
+        } else if (resource.equals(ResourceType.APPLE.getName())){
             // 애플 로그인
-            return null;
+            Map<String, String> userInfo = appleService.getUserInfo(accessToken);
+            String serverId = "apple" + userInfo.get("sub");
+            String nickname = UUID.randomUUID().toString().substring(0, 9);
+            String email = userInfo.get("email");
+            try{
+                // 해당 serverId 데이터베이스 존재 여부. 존재하지 않으면 CustomNotFoundException 반환
+                Member member = memberService.findByServerId(serverId);
+                fcmTokenService.update(member.getFcmToken(), fcmToken);
+            } catch(CustomNotFoundException e) {
+                // 해당 유저가 데이터베이스에 없으면 회원가입 처리
+                // 비밀번호는 서버에서 만든 값
+                Member newMember = Member.builder()
+                        .serverId(serverId)
+                        .nickname(nickname)
+                        .password(bCryptPasswordEncoder.encode(password))
+                        .email(email).build();
+                memberService.save(newMember);
+                FCMToken newFcmToken = FCMToken.builder()
+                        .member(newMember)
+                        .token(fcmToken)
+                        .build();
+                FCMToken save = fcmTokenService.save(newFcmToken);
+                System.out.println("update time = " + save.getModifiedDate());
+                System.out.println("update time = " + save.getCreatedTime());
+
+            }
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(serverId, password);
+            Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+            return authenticate;
         } else{
             return null;
         }
