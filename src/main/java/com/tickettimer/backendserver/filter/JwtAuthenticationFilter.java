@@ -5,15 +5,10 @@ import com.tickettimer.backendserver.auth.PrincipalDetails;
 import com.tickettimer.backendserver.domain.FCMToken;
 import com.tickettimer.backendserver.domain.Member;
 import com.tickettimer.backendserver.domain.Token;
-import com.tickettimer.backendserver.dto.ResourceType;
-import com.tickettimer.backendserver.dto.ResultResponse;
-import com.tickettimer.backendserver.dto.TokenInfo;
+import com.tickettimer.backendserver.dto.*;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
 import com.tickettimer.backendserver.repository.TokenRepository;
-import com.tickettimer.backendserver.service.AppleService;
-import com.tickettimer.backendserver.service.FCMTokenService;
-import com.tickettimer.backendserver.service.JwtService;
-import com.tickettimer.backendserver.service.MemberService;
+import com.tickettimer.backendserver.service.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,6 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final TokenRepository tokenRepository;
     private final Long tokenExpiredMs;
     private final AppleService appleService;
+    private final KakaoOpenFeign kakaoOpenFeign;
 
     private final String password; // 회원 가입시 넣어줄 비밀번호. application.properties에서 관리
     public JwtAuthenticationFilter(
@@ -56,7 +52,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String password,
             TokenRepository tokenRepository,
             Long tokenExpiredMs,
-            AppleService appleService
+            AppleService appleService,
+            KakaoOpenFeign kakaoOpenFeign
     ) {
         this.authenticationManager = authenticationManager;
         this.memberService = memberService;
@@ -68,6 +65,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.tokenExpiredMs = tokenExpiredMs;
         this.tokenRepository = tokenRepository;
         this.appleService = appleService;
+        this.kakaoOpenFeign = kakaoOpenFeign;
     }
 
 
@@ -82,39 +80,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String fcmToken = request.getHeader("fcmToken");
         log.info("소셜 로그인 시도 resource : {}", resource);
 
-
         // 카카오 로그인이라면
         if (resource.equals(ResourceType.KAKAO.getName())) {
-            // header 생성
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(HttpHeaders.AUTHORIZATION, accessToken);
-            httpHeaders.add(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=utf-8");
+            KakaoResponse myInfo = kakaoOpenFeign.getMyInfo(accessToken);
+            KakaoLogoutResponse logout = kakaoOpenFeign.logout(accessToken);
 
-            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(httpHeaders);
-
-            // 사용자 정보 요청하기
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Object> memberInfo = restTemplate.exchange(
-                    "https://kapi.kakao.com/v2/user/me",
-                    HttpMethod.GET,
-                    httpEntity,
-                    Object.class
-            );
-            Map map = objectMapper.convertValue(memberInfo.getBody(), Map.class);
-            Map properties = objectMapper.convertValue(map.get("properties"), Map.class);
-            Map kakaoAccount = objectMapper.convertValue(map.get("kakao_account"), Map.class);
+            // 혹시라도 액세스 토큰의 유출에 대비하기 위해서 유저 정보 가져오고 나면 바로 토큰 만료
+            log.info("카카오 액세스 토큰 만료 완료: {}", logout.getId());
 
             // 서버 식별 아이디
-            String serverId = "kakao" + map.get("id");
-
+            // 혹시 플랫폼별 중복 가능성 때문에 이름 붙임
+            String serverId = "kakao" + myInfo.getId().toString();
             // 닉네임
             // 닉네임은 중복 가능
             // UUID는 식별하기보다는 단순히 랜덤 문자열을 생성하기 위해서 사용
-//            String nickname = (String) properties.get("nickname");
             String nickname = UUID.randomUUID().toString().substring(0, 9);
 
             // 이메일
-            String email = (String) kakaoAccount.get("email");
+            String email = myInfo.getKakao_account().getEmail();
 
             try{
                 // 해당 serverId 데이터베이스 존재 여부. 존재하지 않으면 CustomNotFoundException 반환

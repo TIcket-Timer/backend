@@ -32,6 +32,7 @@ public class SecurityConfig {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenRepository tokenRepository;
     private final AppleService appleService;
+    private final KakaoOpenFeign kakaoOpenFeign;
     @Value("${oauth2.member.kakao.password}")
     private String password;
 
@@ -74,7 +75,8 @@ public class SecurityConfig {
                     password,
                     tokenRepository,
                     tokenExpiredMs,
-                    appleService
+                    appleService,
+                    kakaoOpenFeign
             );
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/oauth2");
             http

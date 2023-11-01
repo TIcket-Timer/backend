@@ -2,6 +2,7 @@ package com.tickettimer.backendserver.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickettimer.backendserver.dto.ResultResponse;
+import feign.FeignException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class AuthenticationExceptionFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (HttpClientErrorException.Unauthorized ex) {
+        } catch (FeignException.Unauthorized ex) {
             writeErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null);
         }
     }
