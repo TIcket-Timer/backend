@@ -201,28 +201,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throw new RuntimeException(ex);
         }
     }
-//    @Override
-//    protected void unsuccessfulAuthentication(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            AuthenticationException failed
-//    ) {
-//        //비밀번호 틀림
-//        writeErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, failed.getMessage());
-//    }
-    private void writeErrorResponse(HttpServletResponse response, int status, String message) {
-        response.setStatus(status);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("utf-8");
-        ResultResponse res = ResultResponse.builder()
-                .code(status)
-                .message(message).build();
-        try {
-            String s = objectMapper.writeValueAsString(res);
-            PrintWriter writer = response.getWriter();
-            writer.write(s);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+
+
 }

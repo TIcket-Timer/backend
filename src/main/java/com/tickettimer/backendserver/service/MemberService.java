@@ -74,4 +74,8 @@ public class MemberService {
             case MELON -> memberRepository.findByMelonAlarm(true);
         };
     }
+
+    public void delete(Member member) {
+        memberRepository.delete(member);
+    }
 }

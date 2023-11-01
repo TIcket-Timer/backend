@@ -1,6 +1,7 @@
 package com.tickettimer.backendserver.service;
 
 import com.google.gson.*;
+import com.tickettimer.backendserver.dto.AppleLogoutRequest;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,10 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class AppleService {
+    private final AppleOpenFeign appleOpenFeign;
 
     /**
      * 1. apple로 부터 공개키 3개 가져옴
@@ -90,9 +93,9 @@ public class AppleService {
 
         Claims userInfo = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(idToken).getBody();
         JsonObject userInfoObject = (JsonObject) parser.parse(new Gson().toJson(userInfo));
-        String userId =  userInfoObject.get("sub").getAsString();
+        String userId = userInfoObject.get("sub").getAsString();
         String email = userInfoObject.get("email").getAsString();
-        log.info("sub : {} email : {}",userId, email);
+        log.info("sub : {} email : {}", userId, email);
         Map<String, String> map = new HashMap<>();
         map.put("sub", userId);
         map.put("email", email);
@@ -118,4 +121,6 @@ public class AppleService {
             throw new RuntimeException(exception);
         }
     }
+
+
 }

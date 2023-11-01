@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+
     @GetMapping
     public ResponseEntity<ResultResponse> findMyInfo(
             HttpServletRequest request
@@ -47,6 +48,7 @@ public class MemberController {
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
 
     }
+
     @GetMapping("/alarms")
     public ResponseEntity<ResultResponse> getFcmAlarm(
             HttpServletRequest request
@@ -78,6 +80,21 @@ public class MemberController {
                 .code(HttpStatus.OK.value())
                 .message("별명을 변경했습니다.")
                 .result(nicknameChange.getName()).build();
+        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
+
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ResultResponse> deleteMember(
+            HttpServletRequest request
+    ) {
+        Long id = (Long) request.getAttribute("id");
+        Member member = memberService.findById(id);
+        memberService.delete(member);
+        ResultResponse res = ResultResponse.builder()
+                .code(HttpStatus.OK.value())
+                .message("탈퇴가 완료되었습니다.")
+                .build();
         return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
 
     }
