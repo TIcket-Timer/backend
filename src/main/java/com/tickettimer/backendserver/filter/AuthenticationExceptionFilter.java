@@ -3,6 +3,7 @@ package com.tickettimer.backendserver.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tickettimer.backendserver.dto.ResultResponse;
 import feign.FeignException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,8 @@ public class AuthenticationExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch (FeignException.Unauthorized ex) {
+            writeErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null);
+        } catch (ExpiredJwtException ex) {
             writeErrorResponse(response, HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null);
         }
     }

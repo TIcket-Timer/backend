@@ -82,8 +82,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // 카카오 로그인이라면
         if (resource.equals(ResourceType.KAKAO.getName())) {
-            KakaoResponse myInfo = kakaoOpenFeign.getMyInfo(accessToken);
-            KakaoLogoutResponse logout = kakaoOpenFeign.logout(accessToken);
+            KakaoResponse myInfo = kakaoOpenFeign.getMyInfo("Bearer "+accessToken);
+            KakaoLogoutResponse logout = kakaoOpenFeign.logout("Bearer "+accessToken);
 
             // 혹시라도 액세스 토큰의 유출에 대비하기 위해서 유저 정보 가져오고 나면 바로 토큰 만료
             log.info("카카오 액세스 토큰 만료 완료: {}", logout.getId());
