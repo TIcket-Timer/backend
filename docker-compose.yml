@@ -7,21 +7,18 @@ services:
     command: redis-server
     volumes:
        - /etc/redis:/usr/local/etc/redis
+       - /etc/data:/data
 #      - C:\Users\growth\redis_volume\redis.conf:/usr/local/etc/redis/redis.conf
 #      - C:\Users\growth\redis_volume\data:/data
     restart: always
 
   springboot:
-    image: openjdk:17-oracle
-    container_name: server
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+    image: growth123/ticket
+    container_name: springboot
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile
     ports:
       - 8080:8080
-#    environment:
-#      REDIS_HOST: redis
-#      REDIS_PORT: 6379
-#      REDIS_PASSWORD: 1234
     depends_on:
       - redis

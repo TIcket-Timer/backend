@@ -2,8 +2,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main" ]
-
+    branches: [ "refactor/code" ]
+env:
+  SERVER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 permissions:
   contents: read
 
@@ -54,7 +55,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "./docker-compose.yml,./deploy.sh"
-          target: root
+          target: ./
 
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -63,9 +64,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            docker rm -f $(docker ps -aq) 
-            docker rmi $(docker images -q)
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
-            chmod u+x ./hello.sh
+            docker stop $(docker ps -a --filter "ancestor=$SERVER_IMAGE" -q)
+            docker rmi $(docker images $SERVER_IMAGE -q)
+            docker pull $SERVER_IMAGE
+            chmod u+x ./deploy.sh
             ./deploy.sh
 #            docker-compose -f "docker-compose.yml" up -d --build

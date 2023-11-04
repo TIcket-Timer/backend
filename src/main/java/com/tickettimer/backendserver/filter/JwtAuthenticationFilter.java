@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Random;
 
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -91,13 +91,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             // 서버 식별 아이디
             // 혹시 플랫폼별 중복 가능성 때문에 이름 붙임
             String serverId = "kakao" + myInfo.getId().toString();
-            // 닉네임
-            // 닉네임은 중복 가능
-            // UUID는 식별하기보다는 단순히 랜덤 문자열을 생성하기 위해서 사용
-            String nickname = UUID.randomUUID().toString().substring(0, 9);
-
-            // 이메일
-            String email = myInfo.getKakao_account().getEmail();
 
             try{
                 // 해당 serverId 데이터베이스 존재 여부. 존재하지 않으면 CustomNotFoundException 반환
@@ -105,6 +98,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 fcmTokenService.update(member.getFcmToken(), fcmToken);
             } catch(CustomNotFoundException e) {
                 // 해당 유저가 데이터베이스에 없으면 회원가입 처리
+                // 닉네임은 랜덤 10글자 문자열
+                Random random = new Random();
+                String nickname = random.ints(97, 123)
+                        .limit(10)
+                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                        .toString();
+
+                // 이메일
+                String email = myInfo.getKakao_account().getEmail();
                 // 비밀번호는 서버에서 만든 값
                 Member newMember = Member.builder()
                         .serverId(serverId)
@@ -129,14 +131,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             // 애플 로그인
             Map<String, String> userInfo = appleService.getUserInfo(accessToken);
             String serverId = "apple" + userInfo.get("sub");
-            String nickname = UUID.randomUUID().toString().substring(0, 9);
-            String email = userInfo.get("email");
+
             try{
                 // 해당 serverId 데이터베이스 존재 여부. 존재하지 않으면 CustomNotFoundException 반환
                 Member member = memberService.findByServerId(serverId);
                 fcmTokenService.update(member.getFcmToken(), fcmToken);
             } catch(CustomNotFoundException e) {
                 // 해당 유저가 데이터베이스에 없으면 회원가입 처리
+                // 닉네임은 랜덤 10글자 문자열
+                Random random = new Random();
+                String nickname = random.ints(97, 123)
+                        .limit(10)
+                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                        .toString();
+                String email = userInfo.get("email");
                 // 비밀번호는 서버에서 만든 값
                 Member newMember = Member.builder()
                         .serverId(serverId)
