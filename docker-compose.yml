@@ -2,15 +2,18 @@ version: '3.4'
 services:
   redis:
     image: redis
+    container_name: redis
 #    command: redis-server /usr/local/etc/redis/redis.conf
     command: redis-server
-#    volumes:
+    volumes:
+       - /etc/redis:/usr/local/etc/redis
 #      - C:\Users\growth\redis_volume\redis.conf:/usr/local/etc/redis/redis.conf
 #      - C:\Users\growth\redis_volume\data:/data
     restart: always
 
   springboot:
     image: openjdk:17-oracle
+    container_name: server
     build:
       context: .
       dockerfile: ./Dockerfile
