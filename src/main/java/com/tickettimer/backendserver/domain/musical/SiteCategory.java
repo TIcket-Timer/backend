@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Arrays;
-
 @AllArgsConstructor
 @Getter
 public enum SiteCategory {

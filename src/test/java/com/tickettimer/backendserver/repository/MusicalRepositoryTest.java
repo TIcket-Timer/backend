@@ -1,7 +1,8 @@
 package com.tickettimer.backendserver.repository;
 
-import com.tickettimer.backendserver.domain.musical.Musical;
+import com.tickettimer.backendserver.domain.musical.now.Musical;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
+import com.tickettimer.backendserver.domain.musical.now.MusicalRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
