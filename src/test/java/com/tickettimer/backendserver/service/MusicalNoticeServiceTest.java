@@ -1,12 +1,10 @@
 package com.tickettimer.backendserver.service;
 
-import com.google.api.Page;
-import com.tickettimer.backendserver.domain.musical.MusicalNotice;
+import com.tickettimer.backendserver.domain.musical.notice.MusicalNotice;
 import com.tickettimer.backendserver.domain.musical.SiteCategory;
-import com.tickettimer.backendserver.exception.CustomNotFoundException;
-import com.tickettimer.backendserver.repository.MusicalNoticeRepository;
-import net.bytebuddy.asm.Advice;
-import org.assertj.core.api.Assertions;
+import com.tickettimer.backendserver.domain.musical.notice.MusicalNoticeService;
+import com.tickettimer.backendserver.global.exception.CustomNotFoundException;
+import com.tickettimer.backendserver.domain.musical.notice.MusicalNoticeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
