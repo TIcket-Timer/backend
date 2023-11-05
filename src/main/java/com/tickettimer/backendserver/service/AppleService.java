@@ -61,18 +61,20 @@ public class AppleService {
         return findKey;
     }
 
-    public PublicKey generatePublicKey(String idToken) throws JsonProcessingException {
+    public PublicKey generatePublicKey(String idToken) {
         // identity token의 kid와 alg를 가져옴
         // header 값만 필요하고 jwt는 header.payload.signature로 구성되어 있기 때문에 .으로 나눈 후 첫 번째만 가져옴
-        String encodedHeader = idToken.split(".")[0];
+        String encodedHeader = idToken.split("\\.")[0];
 
         // 인코딩 된 값을 디코딩 함
         Base64.Decoder decoder = Base64.getUrlDecoder();
         String decodedHeader = new String(decoder.decode(encodedHeader));
+        log.info(decodedHeader);
         Map map = null;
         try {
             map = objectMapper.readValue(decodedHeader, Map.class);
         } catch (JsonProcessingException exception) {
+            log.info(exception.getMessage());
             throw new InvalidTokenException();
         }
 

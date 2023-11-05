@@ -7,8 +7,10 @@ import com.tickettimer.backendserver.domain.Member;
 import com.tickettimer.backendserver.domain.Token;
 import com.tickettimer.backendserver.dto.*;
 import com.tickettimer.backendserver.exception.CustomNotFoundException;
+import com.tickettimer.backendserver.exception.InvalidTokenException;
 import com.tickettimer.backendserver.repository.TokenRepository;
 import com.tickettimer.backendserver.service.*;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.PublicKey;
 import java.util.Map;
 import java.util.Random;
 
@@ -129,8 +132,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         } else if (resource.equals(ResourceType.APPLE.getName())){
             // 애플 로그인
-            Map<String, String> userInfo = appleService.getUserInfo(accessToken);
-            String serverId = "apple" + userInfo.get("sub");
+            log.info("애플 로그인 시도 : {}", accessToken);
+            PublicKey publicKey = appleService.generatePublicKey(accessToken);
+            boolean isSuccess = appleService.validateToken(accessToken, publicKey);
+            if (!isSuccess) {
+                log.info("identity token이 유효하지 않습니다.");
+                throw new InvalidTokenException();
+            }
+            Claims claims = appleService.parseIdToken(accessToken, publicKey);
+
+
+            String serverId = "apple" + claims.getSubject();
+//
+//            Map<String, String> userInfo = appleService.getUserInfo(accessToken);
+//            String serverId = "apple" + userInfo.get("sub");
 
             try{
                 // 해당 serverId 데이터베이스 존재 여부. 존재하지 않으면 CustomNotFoundException 반환
@@ -144,7 +159,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         .limit(10)
                         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                         .toString();
-                String email = userInfo.get("email");
+                String email = (String) claims.get("email");
+//                String email = userInfo.get("email");
                 // 비밀번호는 서버에서 만든 값
                 Member newMember = Member.builder()
                         .serverId(serverId)
