@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "refactor/code" ]
+    branches: [ "main" ]
 env:
   SERVER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 permissions:
