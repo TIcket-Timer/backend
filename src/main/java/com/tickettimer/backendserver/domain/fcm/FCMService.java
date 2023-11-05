@@ -37,21 +37,23 @@ public class FCMService {
 //        }
 //    }
     public BatchResponse sendMessages(Notification notification, List<Member> members) {
-        List<FCMToken> fcmTokens = members.stream()
-                .map(m -> m.getFcmToken())
-                .collect(Collectors.toList());
-        List<String> tokens = fcmTokens.stream().map(
-                t -> t.getToken()
-        ).collect(Collectors.toList());
-        MulticastMessage message = MulticastMessage.builder()
-                .addAllTokens(tokens)
-                .setNotification(notification)
-                .build();
         try {
+            List<FCMToken> fcmTokens = members.stream()
+                    .map(m -> m.getFcmToken())
+                    .collect(Collectors.toList());
+            List<String> tokens = fcmTokens.stream().map(
+                    t -> t.getToken()
+            ).collect(Collectors.toList());
+            MulticastMessage message = MulticastMessage.builder()
+                    .addAllTokens(tokens)
+                    .setNotification(notification)
+                    .build();
             BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
             return response;
 
         } catch (FirebaseMessagingException ex) {
+            throw new FCMException(ex);
+        } catch (IllegalArgumentException ex) {
             throw new FCMException(ex);
         }
     }

@@ -15,9 +15,9 @@ services:
   springboot:
     image: growth123/ticket
     container_name: springboot
-#    build:
-#      context: .
-#      dockerfile: ./Dockerfile
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     ports:
       - 8080:8080
     depends_on:
