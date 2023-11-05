@@ -2,8 +2,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "main" ]
-
+    branches: [ "refactor/code" ]
+env:
+  SERVER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
 permissions:
   contents: read
 
@@ -31,7 +32,7 @@ jobs:
       - run: cat ./src/test/resources/application.properties
 
       - name: Run chmod to make gradlew executable
-        run: chmod +x ./gradlew
+        run: chmod u+x ./gradlew
 
 
       - name: Build with Gradle
@@ -44,7 +45,18 @@ jobs:
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PWD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }} .
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
-          
+      - uses: actions/checkout@v3
+
+      - name: copy docker-compose.yml and deploy.sh
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: "./docker-compose.yml,./deploy.sh"
+          target: ./
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -52,7 +64,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            docker rm -f $(docker ps -aq) 
-            docker rmi $(docker images -q)
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_NAME }}
-            docker-compose -f "docker-compose.yml" up -d --build
+            docker stop $(docker ps -a --filter "ancestor=$SERVER_IMAGE" -q)
+            docker rmi $(docker images $SERVER_IMAGE -q)
+            docker pull $SERVER_IMAGE
+            chmod u+x ./deploy.sh
+            ./deploy.sh
+#            docker-compose -f "docker-compose.yml" up -d --build
