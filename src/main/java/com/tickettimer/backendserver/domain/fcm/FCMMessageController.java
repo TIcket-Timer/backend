@@ -48,7 +48,8 @@ public class FCMMessageController {
         List<Member> members = memberService.findMemberBySiteAlarm(siteCategory);
         Notification notification = Notification.builder()
                 .setTitle(requestDto.getTitle())
-                .setBody(requestDto.getContent()).build();
+                .setBody(requestDto.getContent())
+                .build();
         BatchResponse response = fcmService.sendMessages(notification, members);
         log.info(response.toString());
         ResultResponse res = ResultResponse.builder()
