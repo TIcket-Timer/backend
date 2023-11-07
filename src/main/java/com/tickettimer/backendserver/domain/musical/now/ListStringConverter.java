@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 public class ListStringConverter implements AttributeConverter<List<String>, String> {
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
-        String collect = attribute.stream().map(String::valueOf).collect(Collectors.joining(","));
+        String collect = attribute.stream().map(String::valueOf).collect(Collectors.joining(";"));
         return collect;
     }
 
     @Override
     public List<String> convertToEntityAttribute(String s) {
-        return Arrays.stream(s.split(","))
+        return Arrays.stream(s.split(";"))
                 .map(String::trim).collect(Collectors.toList());
     }
 }

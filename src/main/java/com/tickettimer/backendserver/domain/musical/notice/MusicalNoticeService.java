@@ -1,5 +1,6 @@
 package com.tickettimer.backendserver.domain.musical.notice;
 
+import com.tickettimer.backendserver.domain.fcm.FCMService;
 import com.tickettimer.backendserver.global.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MusicalNoticeService {
     private final MusicalNoticeRepository musicalNoticeRepository;
+    private final FCMService fcmService;
     // 저장
     public MusicalNotice save(MusicalNotice musicalNotice) {
         return  musicalNoticeRepository.save(musicalNotice);
