@@ -119,6 +119,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         .serverId(serverId)
                         .nickname(nickname)
                         .password(bCryptPasswordEncoder.encode(password))
+                        .role("ROLE_USER")
                         .email(email).build();
                 memberService.save(newMember);
                 FCMToken newFcmToken = FCMToken.builder()
@@ -170,6 +171,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         .serverId(serverId)
                         .nickname(nickname)
                         .password(bCryptPasswordEncoder.encode(password))
+                        .role("ROLE_USER")
                         .email(email).build();
                 memberService.save(newMember);
                 FCMToken newFcmToken = FCMToken.builder()

@@ -36,8 +36,8 @@ public class Member {
 
     private String email;
 
-    private String profileUrl;
     private String password;
+    private String role;
     @Setter
     private boolean interAlarm;
     @Setter
@@ -46,15 +46,15 @@ public class Member {
     private boolean yesAlarm;
 
     @Builder
-    public Member(String serverId, String nickname, String email, String profileUrl, String password) {
+    public Member(String serverId, String nickname, String email, String password, String role) {
         this.serverId=serverId;
         this.nickname=nickname;
         this.email=email;
-        this.profileUrl=profileUrl;
         this.password = password;
         this.interAlarm = true;
         this.melonAlarm = true;
         this.yesAlarm = true;
+        this.role = role;
     }
 
 }

@@ -37,7 +37,7 @@ public class FCMMessageController {
 //                .result(response).build();
 //        return new ResponseEntity<>(res, HttpStatusCode.valueOf(res.getCode()));
 //    }
-    @PostMapping("/fcm/{site}")
+    @PostMapping("/api/fcm/{site}")
     public ResponseEntity<ResultResponse> sendFCMWithSite(
             @PathVariable("site") String site,
             @RequestBody FCMRequestDto requestDto

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -60,7 +61,12 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 request -> request.requestMatchers("/api/oauth2/kakao").permitAll()
                         .requestMatchers("/login/oauth2/code/kakao").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/musicalNotices").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/musicals").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/musicals/ranking").hasRole("ADMIN")
+                        .requestMatchers("/api/fcm/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
+
         );
         return httpSecurity.build();
     }
