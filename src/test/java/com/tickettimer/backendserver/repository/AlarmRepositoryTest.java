@@ -37,7 +37,6 @@ class AlarmRepositoryTest {
         Member member = Member.builder()
                 .serverId("interpark")
                 .nickname("nick")
-                .profileUrl("url")
                 .email("abc@naver.com")
                 .password("123456")
                 .build();
@@ -71,7 +70,6 @@ class AlarmRepositoryTest {
         Member member = Member.builder()
                 .serverId("interpark")
                 .nickname("nick")
-                .profileUrl("url")
                 .email("abc@naver.com")
                 .password("123456")
                 .build();
